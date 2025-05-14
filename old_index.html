@@ -12,42 +12,9 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #2C1F3D; /* Roxo Escuro Profundo */
-            color: #EAE0FC; /* Lavanda Claro */
+            background-color: #f3f4f6;
+            /* Cinza claro de fundo */
         }
-
-        .container {
-            background-color: #3E2C51; /* Roxo Escuro Médio */
-            border: 1px solid #DAA520; /* Dourado Ocre para borda sutil */
-        }
-
-        h1, h2 {
-            color: #FFD700; /* Dourado Clássico */
-            border-bottom-color: #DAA520; /* Dourado Ocre para sublinhados */
-        }
-
-        label {
-            color: #D8BFD8; /* Thistle - Roxo claro para labels */
-        }
-
-        input[type=text],
-        input[type=number],
-        select,
-        textarea {
-            background-color: #251A33; /* Roxo Mais Escuro */
-            color: #EAE0FC; /* Lavanda Claro */
-            border: 1px solid #7F00FF; /* Violeta Vibrante para bordas */
-            border-radius: 0.375rem; /* rounded-md */
-        }
-
-        input[type=text]:focus,
-        input[type=number]:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #FFD700; /* Dourado Clássico no foco */
-            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3); /* Sombra dourada suave */
-        }
-
 
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
@@ -61,7 +28,7 @@
         }
 
         ::placeholder {
-            color: #A094B7; /* Lavanda Médio */
+            color: #9ca3af;
             opacity: 1;
         }
 
@@ -70,10 +37,11 @@
             appearance: none;
             width: 100%;
             height: 8px;
-            background: #5A3973; /* Roxo mais escuro para trilha */
+            background: #d1d5db;
+            /* Cor da trilha */
             border-radius: 5px;
             outline: none;
-            opacity: 0.8;
+            opacity: 0.7;
             transition: opacity .2s;
         }
 
@@ -86,38 +54,42 @@
             appearance: none;
             width: 18px;
             height: 18px;
-            background: #FFD700; /* Dourado Clássico para o polegar */
+            background: #3b82f6;
+            /* Cor do polegar (azul) */
             border-radius: 50%;
             cursor: pointer;
-            border: 2px solid #2C1F3D; /* Borda roxa escura no polegar */
         }
 
         input[type=range]::-moz-range-thumb {
             width: 18px;
             height: 18px;
-            background: #FFD700; /* Dourado Clássico */
+            background: #3b82f6;
+            /* Cor do polegar (azul) */
             border-radius: 50%;
             cursor: pointer;
-            border: 2px solid #2C1F3D; /* Borda roxa escura no polegar */
+            border: none;
+            /* Remove a borda padrão do Firefox */
         }
 
         .weight-label {
             min-width: 150px;
+            /* Garante alinhamento */
             display: inline-block;
-            color: #D8BFD8; /* Thistle */
         }
 
         .weight-value {
-            min-width: 85px;
+            min-width: 40px;
+            /* Espaço para o valor do peso */
             display: inline-block;
             text-align: right;
             font-weight: 500;
-            color: #EAE0FC; /* Lavanda Claro */
         }
 
         .loader {
-            border: 4px solid #5A3973; /* Roxo mais escuro */
-            border-top: 4px solid #FFD700; /* Dourado */
+            border: 4px solid #f3f4f6;
+            /* Light grey */
+            border-top: 4px solid #3b82f6;
+            /* Blue */
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -138,6 +110,8 @@
         /* Estilo para o grid de resultados */
         #results-output {
             display: grid;
+            /* Cria colunas que se ajustam automaticamente */
+            /* Cada coluna terá no mínimo 280px e no máximo 1 fração do espaço disponível */
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1rem;
             /* Espaçamento entre os cards */
@@ -171,169 +145,108 @@
                 padding-left: 0;
             }
 
+            /* Garante que o grid tenha pelo menos uma coluna em telas pequenas */
             #results-output {
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             }
-        }
-
-        .result-card {
-            background-color: #3E2C51; /* Roxo Escuro Médio */
-            border: 1px solid #DAA520; /* Dourado Ocre */
-            color: #EAE0FC; /* Lavanda Claro */
-            box-shadow: 0 4px 6px rgba(218, 165, 32, 0.1); /* Sombra dourada sutil */
-            outline: 1px solid #FFD700; /* Dourado Clássico para contorno */
-        }
-
-        .result-card h3 {
-            color: #FFD700; /* Dourado Clássico para títulos de filmes */
-        }
-
-        .result-card p {
-            color: #EAE0FC; /* Lavanda Claro para textos */
-        }
-
-        /* Estilos para os status do CSV */
-        .status-loading {
-            color: #FFD700; /* Dourado Clássico */
-        }
-
-        .status-success {
-            color: #4CAF50; /* Verde para sucesso */
-        }
-
-        .status-warning {
-            color: #FF9800; /* Laranja para avisos */
-        }
-
-        .status-error {
-            color: #F44336; /* Vermelho para erros */
-        }
-
-        /* Estilo para o botão de busca */
-        #search-button {
-            background-color: #6A5ACD; /* Roxo Médio */
-            color: #FFFFFF; /* Branco */
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.375rem;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        #search-button:hover {
-            background-color: #FFD700; /* Dourado Clássico */
-            color: #2C1F3D; /* Roxo Escuro Profundo */
-            transform: translateY(-2px);
-        }
-
-        #search-button:disabled {
-            background-color: #555; /* Cinza escuro para desabilitado */
-            cursor: not-allowed;
         }
     </style>
 </head>
 
 <body class="p-4 md:p-8">
-    <div class="container mx-auto max-w-7xl p-6 md:p-8 rounded-lg shadow-lg">
+    <div class="container mx-auto max-w-7xl bg-white p-6 md:p-8 rounded-lg shadow-lg">
 
-        <h1 class="text-2xl md:text-3xl font-bold mb-6 text-center">Recomendador de Filmes (CBR)</h1>
+        <h1 class="text-2xl md:text-3xl font-bold mb-6 text-center text-gray-800">Recomendador de Filmes (CBR)</h1>
 
-        <div class="mb-8 p-4 border border-purple-700 rounded-lg bg-purple-900/30">
-            <h2 class="text-lg font-semibold mb-2">Estado da Base de Filmes</h2>
-            <p id="csv-status" class="text-sm">A carregar base de filmes...</p>
+        <div class="mb-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
+            <h2 class="text-lg font-semibold mb-2 text-gray-700">Estado da Base de Filmes</h2>
+            <p id="csv-status" class="text-sm text-gray-500">A carregar base de filmes...</p>
         </div>
 
 
         <div class="md:flex mb-8">
             <div class="md:w-1/2 md:pr-2">
-                <h2 class="text-xl font-semibold mb-4 border-b pb-2">Filme Desejado</h2>
+                <h2 class="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Filme Desejado</h2>
                 <form id="cbr-form" class="space-y-4">
                     <div>
-                        <label for="generos" class="block text-sm font-medium">Gêneros (separados por
+                        <label for="generos" class="block text-sm font-medium text-gray-700">Gêneros (separados por
                             vírgula):</label>
                         <input type="text" id="generos" name="generos" placeholder="Ex: Action, Sci-Fi"
-                            list="generos-list"
-                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
-                        <datalist id="generos-list"></datalist>
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
                     <div>
-                        <label for="ano_lancamento" class="block text-sm font-medium">Ano de Lançamento
+                        <label for="ano_lancamento" class="block text-sm font-medium text-gray-700">Ano de Lançamento
                             (aprox.):</label>
-                        <input type="number" id="ano_lancamento" name="ano_lancamento" placeholder="Ex: 1999"
-                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+                        <input type="number" id="ano_lancamento" name="ano_lancamento" placeholder="Ex: 1999" min="1900"
+                            max="2025"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
                     <div>
-                        <label for="classificacao_etaria" class="block text-sm font-medium">Classificação
+                        <label for="classificacao_etaria" class="block text-sm font-medium text-gray-700">Classificação
                             Etária:</label>
                         <input type="text" id="classificacao_etaria" name="classificacao_etaria"
                             placeholder="Ex: R, PG-13, G, Unrated" list="mpaa-list"
-                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
-                        <datalist id="mpaa-list"></datalist>
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <datalist id="mpaa-list">
+                        </datalist>
                     </div>
                     <div>
-                        <label for="duracao_minutos" class="block text-sm font-medium">Duração (minutos
+                        <label for="duracao_minutos" class="block text-sm font-medium text-gray-700">Duração (minutos
                             aprox.):</label>
-                        <input type="number" id="duracao_minutos" name="duracao_minutos" placeholder="Ex: 120"
-                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+                        <input type="number" id="duracao_minutos" name="duracao_minutos" placeholder="Ex: 120" min="1"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
                     <div>
-                        <label for="avaliacao_critica" class="block text-sm font-medium">Avaliação IMDb
+                        <label for="avaliacao_critica" class="block text-sm font-medium text-gray-700">Avaliação IMDb
                             Mínima:</label>
                         <input type="number" id="avaliacao_critica" name="avaliacao_critica" placeholder="Ex: 7.5"
-                            step="0.1"
-                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+                            step="0.1" min="0" max="10"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
                     <div>
-                        <label for="votos" class="block text-sm font-medium">Votos IMDb Mínimos:</label>
-                        <input type="number" id="votos" name="votos" placeholder="Ex: 100000"
-                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+                        <label for="votos" class="block text-sm font-medium text-gray-700">Votos IMDb Mínimos:</label>
+                        <input type="number" id="votos" name="votos" placeholder="Ex: 100000" min="0"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
                     <div>
-                        <label for="estrelas" class="block text-sm font-medium">Estrelas (separados por
+                        <label for="estrelas" class="block text-sm font-medium text-gray-700">Estrelas (separados por
                             vírgula):</label>
                         <input type="text" id="estrelas" name="estrelas" placeholder="Ex: Keanu Reeves, Tom Hanks"
-                            list="estrelas-list"
-                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
-                        <datalist id="estrelas-list"></datalist>
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
                     <div>
-                        <label for="diretores" class="block text-sm font-medium">Diretor(es) (separados
+                        <label for="diretores" class="block text-sm font-medium text-gray-700">Diretor(es) (separados
                             por vírgula):</label>
                         <input type="text" id="diretores" name="diretores" placeholder="Ex: Christopher Nolan"
-                            list="diretores-list"
-                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
-                        <datalist id="diretores-list"></datalist>
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
                     <div>
-                        <label for="roteiristas" class="block text-sm font-medium">Roteirista(s)
+                        <label for="roteiristas" class="block text-sm font-medium text-gray-700">Roteirista(s)
                             (separados por vírgula):</label>
                         <input type="text" id="roteiristas" name="roteiristas" placeholder="Ex: Quentin Tarantino"
-                            list="roteiristas-list"
-                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
-                        <datalist id="roteiristas-list"></datalist>
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
                 </form>
             </div>
 
             <div class="md:w-1/2 md:pl-4">
-                <h2 class="text-xl font-semibold mb-4 border-b pb-2">Ajustar Pesos (Importância)</h2>
+                <h2 class="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Ajustar Pesos (Importância)</h2>
                 <div id="weights-form" class="space-y-3">
                 </div>
             </div>
         </div>
 
         <div class="mb-6 max-w-md mx-auto">
-            <label for="num_results_slider" class="block text-sm font-medium mb-1 text-center">Número de
-                Recomendações: <span id="num_results_value">10 / 50</span></label>
+            <label for="num_results_slider" class="block text-sm font-medium text-gray-700 mb-1 text-center">Número de
+                Recomendações: <span id="num_results_value">10</span></label>
             <input type="range" id="num_results_slider" name="num_results_slider" min="5" max="50" value="10"
-                class="w-full h-2 rounded-lg appearance-none cursor-pointer">
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
         </div>
 
 
         <div class="text-center mb-8">
             <button id="search-button"
-                class="bg-purple-600 hover:bg-yellow-500 text-white hover:text-purple-900 font-bold py-2 px-6 rounded-lg shadow transition duration-150 ease-in-out"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow transition duration-150 ease-in-out"
                 disabled>
                 Buscar Recomendações
             </button>
@@ -342,24 +255,24 @@
         <div id="results-section" class="mt-8 hidden">
             <div class="md:flex mb-6">
                 <div class="md:w-1/2 md:pr-2 mb-4 md:mb-0">
-                    <h2 class="text-xl font-semibold mb-3 border-b pb-2">Critérios da Busca</h2>
+                    <h2 class="text-xl font-semibold mb-3 text-gray-700 border-b pb-2">Critérios da Busca</h2>
                     <div id="search-criteria"
-                        class="text-sm p-4 rounded-lg border border-purple-700 bg-purple-900/30 h-48 overflow-y-auto">
+                        class="text-sm text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-200 h-48 overflow-y-auto">
                     </div>
                 </div>
                 <div class="md:w-1/2 md:pl-2">
-                    <h2 class="text-xl font-semibold mb-3 border-b pb-2">Pesos Utilizados</h2>
+                    <h2 class="text-xl font-semibold mb-3 text-gray-700 border-b pb-2">Pesos Utilizados</h2>
                     <div id="weights-used"
-                        class="text-sm p-4 rounded-lg border border-purple-700 bg-purple-900/30 h-48 overflow-y-auto">
+                        class="text-sm text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-200 h-48 overflow-y-auto">
                     </div>
                 </div>
             </div>
 
-            <h2 class="text-xl md:text-2xl font-semibold mb-4 border-b pb-2">Filmes Recomendados</h2>
+            <h2 class="text-xl md:text-2xl font-semibold mb-4 text-gray-700 border-b pb-2">Filmes Recomendados</h2>
             <div id="loading-indicator" class="loader hidden"></div>
             <div id="results-output" class="mt-4">
             </div>
-            <div id="no-results" class="text-center py-4 hidden">
+            <div id="no-results" class="text-center text-gray-500 py-4 hidden">
                 Nenhum filme encontrado com os critérios e pesos fornecidos.
             </div>
         </div>
@@ -367,31 +280,28 @@
 
     <script>
         // --- 1. Constantes e Dados Globais ---
+
+        // !!! IMPORTANTE: COLOQUE O URL DO SEU ARQUIVO CSV AQUI !!!
         const CSV_FILE_URL = "filmes_base_novo.csv";
 
-        // Lista padrão para ORDEM da classificação etária (usada na similaridade)
-        const CLASSIFICACOES_MPAA_ORDEM = [
+        const CLASSIFICACOES_MPAA_POSSIVEIS = [
             "Unrated", "Not Rated", "Unknown", "Approved", "Passed", "K-A", "TV-Y",
             "G", "TV-G", "GP", "M", "PG", "TV-PG", "M/PG", "TV-Y7", "TV-Y7-FV",
             "13+", "PG-13", "TV-13", "TV-14", "16+", "R", "MA-17", "TV-MA",
             "NC-17", "X", "18+"
         ];
-        // Mapa para cálculo de similaridade ordinal
-        const CLASSIFICACAO_MPAA_MAPA_ORDINAL = CLASSIFICACOES_MPAA_ORDEM.reduce((map, val, i) => { map[val] = i; return map; }, {});
-        const MAX_DIFF_CLASSIFICACAO_MPAA = CLASSIFICACOES_MPAA_ORDEM.length - 1;
+        const CLASSIFICACAO_MPAA_MAPA_ORDINAL = CLASSIFICACOES_MPAA_POSSIVEIS.reduce((map, val, i) => { map[val] = i; return map; }, {});
+        const MAX_DIFF_CLASSIFICACAO_MPAA = CLASSIFICACOES_MPAA_POSSIVEIS.length - 1;
 
-        // Valores MÍNIMOS/MÁXIMOS PADRÃO (serão sobrepostos pelos dados do CSV se disponíveis)
-        let RANGES = {
-            ano_lancamento: { min: 1920, max: new Date().getFullYear() },
-            duracao_minutos: { min: 30, max: 300 },
-            avaliacao_critica: { min: 0.0, max: 10.0 },
-            votos: { min: 0, max: 3000000 },
-            orcamento: { min: 1000, max: 500000000 },
-            bilheteria_mundial: { min: 0, max: 3000000000 },
-            vitorias: { min: 0, max: 200 },
-            indicacoes: { min: 0, max: 300 },
-            oscars_indicados: { min: 0, max: 50 }
-        };
+        const MIN_ANO = 1920; const MAX_ANO = new Date().getFullYear();
+        const MIN_DURACAO = 30; const MAX_DURACAO = 300;
+        const MIN_AVALIACAO_IMDB = 0.0; const MAX_AVALIACAO_IMDB = 10.0;
+        const MIN_VOTOS = 0; const MAX_VOTOS = 3000000;
+        const MIN_ORCAMENTO = 1000; const MAX_ORCAMENTO = 500000000;
+        const MIN_BILHETERIA_MUNDIAL = 0; const MAX_BILHETERIA_MUNDIAL = 3000000000;
+        const MIN_VITORIAS = 0; const MAX_VITORIAS = 200;
+        const MIN_INDICACOES = 0; const MAX_INDICACOES = 300;
+        const MIN_OSCARS_INDICADOS = 0; const MAX_OSCARS_INDICADOS = 50;
 
         const PESOS_PADRAO = {
             generos: 0.20, ano_lancamento: 0.10, classificacao_etaria: 0.10,
@@ -401,7 +311,7 @@
             vitorias: 0.03, indicacoes: 0.02, oscars_indicados: 0.01
         };
 
-        let BASE_DE_CASOS = [ /* Dados de exemplo serão preenchidos se CSV falhar */];
+        let BASE_DE_CASOS = [];
         let isExampleData = true;
 
         // --- Elementos do DOM ---
@@ -416,20 +326,16 @@
         const loadingIndicator = document.getElementById('loading-indicator');
         const noResultsDiv = document.getElementById('no-results');
         const mpaaDatalist = document.getElementById('mpaa-list');
-        const generosDatalist = document.getElementById('generos-list');
-        const estrelasDatalist = document.getElementById('estrelas-list');
-        const diretoresDatalist = document.getElementById('diretores-list');
-        const roteiristasDatalist = document.getElementById('roteiristas-list');
         const numResultsSlider = document.getElementById('num_results_slider');
         const numResultsValueSpan = document.getElementById('num_results_value');
 
         // --- 2. Funções Auxiliares de Parsing e Conversão ---
         function parseCommaSeparatedString(valueStr) {
             if (!valueStr || typeof valueStr !== 'string') return [];
+            // Lida com strings que podem estar entre aspas
             const values = [];
             let currentVal = '';
             let inQuotes = false;
-            // Tratamento simples para vírgulas dentro de aspas
             for (let char of valueStr) {
                 if (char === '"') {
                     inQuotes = !inQuotes;
@@ -440,9 +346,8 @@
                     currentVal += char;
                 }
             }
-            values.push(currentVal.trim());
-            // Remove aspas das extremidades se existirem
-            return values.map(v => v.replace(/^"|"$/g, '')).filter(item => item);
+            values.push(currentVal.trim()); // Adiciona o último valor
+            return values.filter(item => item); // Remove itens vazios
         }
 
         function toInt(val) {
@@ -489,26 +394,24 @@
             if (!ratingRaw || typeof ratingRaw !== 'string') return "Unrated";
             const ratingTrimmed = ratingRaw.trim();
             if (!ratingTrimmed || ["none", "na", "n/a", "nan"].includes(ratingTrimmed.toLowerCase())) return "Unrated";
-            // Verifica se já está na lista padrão (considera a ordem)
-            if (CLASSIFICACOES_MPAA_ORDEM.includes(ratingTrimmed)) return ratingTrimmed;
-            // Tenta normalizar (ex: "PG 13" -> "PG-13")
+            if (CLASSIFICACOES_MPAA_POSSIVEIS.includes(ratingTrimmed)) return ratingTrimmed;
             const normalizedRating = ratingTrimmed.toUpperCase().replace(/\s+/g, "-");
-            if (CLASSIFICACOES_MPAA_ORDEM.includes(normalizedRating)) return normalizedRating;
-            // Se não encontrou, retorna o original (pode ser um valor não padrão)
+            if (CLASSIFICACOES_MPAA_POSSIVEIS.includes(normalizedRating)) return normalizedRating;
             return ratingTrimmed;
         }
 
+        // Função para formatar números como moeda (USD por padrão)
         function formatCurrency(value) {
             if (value === null || value === undefined || isNaN(value)) return 'N/A';
             return value.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
 
-        // --- 3. Funções de Parsing de CSV e Atualização de Inputs ---
+        // --- 3. Funções de Parsing de CSV ---
         function parseCSV(csvText) {
             const lines = csvText.trim().split(/\r?\n/);
             if (lines.length < 2) throw new Error("CSV inválido: precisa de cabeçalho e dados.");
 
-            const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/^"|"$/g, '')); // Limpa aspas do header
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
             const expectedHeaders = [
                 { csv: 'id', internal: 'id' }, { csv: 'title', internal: 'titulo' },
                 { csv: 'link', internal: 'link' }, { csv: 'year', internal: 'ano_lancamento' },
@@ -521,12 +424,10 @@
                 { csv: 'win', internal: 'vitorias' }, { csv: 'nomination', internal: 'indicacoes' },
                 { csv: 'oscar', internal: 'oscars_indicados' }
             ];
-            const headerMap = {}; // Mapeia índice da coluna para chave interna
-            headers.forEach((header, index) => {
-                const mapping = expectedHeaders.find(eh => eh.csv === header);
-                if (mapping) {
-                    headerMap[index] = mapping.internal;
-                }
+            const headerMap = {};
+            expectedHeaders.forEach(eh => {
+                const index = headers.indexOf(eh.csv.toLowerCase());
+                if (index !== -1) headerMap[index] = eh.internal;
             });
 
             const data = [];
@@ -535,10 +436,10 @@
                 let currentVal = '';
                 let inQuotes = false;
                 for (let char of lines[i]) {
-                    if (char === '"' && lines[i][lines[i].indexOf(char) - 1] !== '\\') {
+                    if (char === '"' && lines[i][lines[i].indexOf(char) - 1] !== '\\') { // Lida com aspas, ignorando as escapadas (\")
                         inQuotes = !inQuotes;
                     } else if (char === ',' && !inQuotes) {
-                        values.push(currentVal.trim().replace(/^"|"$/g, '').replace(/\\"/g, '"'));
+                        values.push(currentVal.trim().replace(/^"|"$/g, '').replace(/\\"/g, '"')); // Remove aspas das extremidades e desescapa as internas
                         currentVal = '';
                     } else {
                         currentVal += char;
@@ -546,12 +447,13 @@
                 }
                 values.push(currentVal.trim().replace(/^"|"$/g, '').replace(/\\"/g, '"'));
 
+
                 const movie = {};
                 let hasUsefulData = false;
                 for (const colIndex in headerMap) {
                     const internalKey = headerMap[colIndex];
+                    // Acessa o valor pelo índice correto
                     const rawValue = values[parseInt(colIndex)] ? values[parseInt(colIndex)].trim() : null;
-
                     if (rawValue === null || rawValue === "") { movie[internalKey] = null; continue; }
                     hasUsefulData = true;
                     switch (internalKey) {
@@ -566,117 +468,45 @@
                             movie[internalKey] = toFloat(rawValue); break;
                         case 'diretores': case 'roteiristas': case 'estrelas': case 'generos':
                         case 'pais_origem': case 'idioma':
-                            // Usa a função parseCommaSeparatedString que lida com aspas
-                            movie[internalKey] = parseCommaSeparatedString(rawValue);
-                            break;
+                            movie[internalKey] = parseCommaSeparatedString(rawValue); break;
                         default: movie[internalKey] = rawValue;
                     }
                 }
-                // Garante que campos array sejam sempre arrays, mesmo que vazios
-                ['diretores', 'roteiristas', 'estrelas', 'generos', 'pais_origem', 'idioma'].forEach(key => {
-                    if (!movie[key]) movie[key] = [];
-                });
-
                 if (hasUsefulData && movie.titulo) data.push(movie);
             }
             return data;
         }
 
-        /** Extrai valores únicos de um campo (incluindo itens dentro de arrays) */
-        function extractUniqueValues(key) {
-            const values = new Set();
-            BASE_DE_CASOS.forEach(caso => {
-                const val = caso[key];
-                if (Array.isArray(val)) {
-                    val.forEach(item => item && values.add(String(item).trim()));
-                } else if (val !== null && val !== undefined && String(val).trim() !== '') {
-                    values.add(String(val).trim());
-                }
-            });
-            return Array.from(values).sort();
-        }
-
-        /** Calcula min/max para um campo numérico */
-        function calculateMinMax(key) {
-            let min = Infinity;
-            let max = -Infinity;
-            let foundValid = false;
-            BASE_DE_CASOS.forEach(caso => {
-                const val = caso[key];
-                if (val !== null && typeof val === 'number' && !isNaN(val)) {
-                    foundValid = true;
-                    if (val < min) min = val;
-                    if (val > max) max = val;
-                }
-            });
-            // Retorna o range padrão se nenhum valor válido for encontrado
-            return foundValid ? { min, max } : RANGES[key];
-        }
-
-        /** Popula um datalist com opções */
-        function populateDatalist(datalistElement, values) {
-            if (!datalistElement) return;
-            datalistElement.innerHTML = ''; // Limpa opções antigas
-            values.forEach(value => {
-                const option = document.createElement('option');
-                option.value = value;
-                datalistElement.appendChild(option);
-            });
-        }
-
-        /** Atualiza min, max e placeholder de um input numérico */
-        function updateInputRangeAndPlaceholder(inputId, range) {
-            const inputElement = document.getElementById(inputId);
-            if (!inputElement || !range) return;
-            if (range.min !== Infinity) inputElement.min = range.min;
-            if (range.max !== -Infinity) inputElement.max = range.max;
-            inputElement.placeholder = `Ex: (${range.min !== Infinity ? range.min : 'min'} - ${range.max !== -Infinity ? range.max : 'max'})`;
-        }
-
-        /** Atualiza todos os inputs baseados nos dados carregados */
-        function updateDataBasedInputs() {
-            // Popula Datalists para campos de texto/array
-            populateDatalist(generosDatalist, extractUniqueValues('generos'));
-            populateDatalist(estrelasDatalist, extractUniqueValues('estrelas'));
-            populateDatalist(diretoresDatalist, extractUniqueValues('diretores'));
-            populateDatalist(roteiristasDatalist, extractUniqueValues('roteiristas'));
-            // Para classificação, combina os valores únicos do dataset com a lista padrão para garantir que todos os padrões estejam disponíveis
-            const uniqueRatingsFromData = extractUniqueValues('classificacao_etaria');
-            const allPossibleRatings = [...new Set([...CLASSIFICACOES_MPAA_ORDEM, ...uniqueRatingsFromData])].sort();
-            populateDatalist(mpaaDatalist, allPossibleRatings);
-
-            // Calcula e Atualiza Ranges para campos numéricos
-            RANGES.ano_lancamento = calculateMinMax('ano_lancamento');
-            RANGES.duracao_minutos = calculateMinMax('duracao_minutos');
-            RANGES.avaliacao_critica = calculateMinMax('avaliacao_critica');
-            RANGES.votos = calculateMinMax('votos');
-            // Atualiza os atributos e placeholders dos inputs
-            updateInputRangeAndPlaceholder('ano_lancamento', RANGES.ano_lancamento);
-            updateInputRangeAndPlaceholder('duracao_minutos', RANGES.duracao_minutos);
-            updateInputRangeAndPlaceholder('avaliacao_critica', RANGES.avaliacao_critica);
-            updateInputRangeAndPlaceholder('votos', RANGES.votos);
-            // Atualizar outros campos numéricos se forem adicionados ao form
-        }
-
-
         async function loadCSVFromURL(url) {
+            // Dados de exemplo caso o carregamento falhe ou URL não seja definida
             const exampleData = [
-                { "id": "ex001", "titulo": "Filme de Exemplo A (Ação)", "link": "#", "ano_lancamento": 2020, "duracao_minutos": 120, "classificacao_etaria": "PG-13", "avaliacao_critica": 7.5, "votos": 150000, "orcamento": 50000000, "bilheteria_mundial": 150000000, "diretores": ["Diretor Exemplo"], "roteiristas": ["Roteirista Exemplo"], "estrelas": ["Ator Exemplo 1", "Atriz Exemplo 1"], "generos": ["Action", "Adventure"], "pais_origem": ["USA"], "idioma": ["English"], "vitorias": 5, "indicacoes": 10, "oscars_indicados": 1 },
-                { "id": "ex002", "titulo": "Filme de Exemplo B (Comédia)", "link": "#", "ano_lancamento": 2019, "duracao_minutos": 95, "classificacao_etaria": "G", "avaliacao_critica": 6.8, "votos": 80000, "orcamento": 20000000, "bilheteria_mundial": 70000000, "diretores": ["Outro Diretor"], "roteiristas": ["Outro Roteirista"], "estrelas": ["Comediante Famoso", "Atriz Coadjuvante"], "generos": ["Comedy", "Family"], "pais_origem": ["Canada"], "idioma": ["English", "French"], "vitorias": 2, "indicacoes": 3, "oscars_indicados": 0 }
+                {
+                    "id": "ex001", "titulo": "Filme de Exemplo A (Ação)", "link": "#", "ano_lancamento": 2020, "duracao_minutos": 120,
+                    "classificacao_etaria": "PG-13", "avaliacao_critica": 7.5, "votos": 150000, "orcamento": 50000000,
+                    "bilheteria_mundial": 150000000, "diretores": ["Diretor Exemplo"], "roteiristas": ["Roteirista Exemplo"],
+                    "estrelas": ["Ator Exemplo 1", "Atriz Exemplo 1"], "generos": ["Action", "Adventure"],
+                    "pais_origem": ["USA"], "idioma": ["English"], "vitorias": 5, "indicacoes": 10, "oscars_indicados": 1
+                },
+                {
+                    "id": "ex002", "titulo": "Filme de Exemplo B (Comédia)", "link": "#", "ano_lancamento": 2019, "duracao_minutos": 95,
+                    "classificacao_etaria": "G", "avaliacao_critica": 6.8, "votos": 80000, "orcamento": 20000000,
+                    "bilheteria_mundial": 70000000, "diretores": ["Outro Diretor"], "roteiristas": ["Outro Roteirista"],
+                    "estrelas": ["Comediante Famoso", "Atriz Coadjuvante"], "generos": ["Comedy", "Family"],
+                    "pais_origem": ["Canada"], "idioma": ["English", "French"], "vitorias": 2, "indicacoes": 3, "oscars_indicados": 0
+                }
             ];
 
             if (!url || url === "URL_DO_SEU_CSV_AQUI") {
-                csvStatus.textContent = "URL do CSV não definida. A usar dados de exemplo.";
-                csvStatus.className = "mt-2 text-sm status-warning"; // Amarelo/Dourado para aviso
+                csvStatus.textContent = "URL do CSV não definida no código. A usar dados de exemplo.";
+                csvStatus.className = "mt-2 text-sm text-yellow-600";
                 BASE_DE_CASOS = exampleData;
                 isExampleData = true;
-                updateDataBasedInputs(); 
                 searchButton.disabled = false;
                 return;
             }
 
             csvStatus.textContent = `A carregar CSV de: ${url}...`;
-            csvStatus.className = "mt-2 text-sm status-loading"; // Azul/Dourado para carregando
+            csvStatus.className = "mt-2 text-sm text-blue-600";
             searchButton.disabled = true;
 
             try {
@@ -689,21 +519,20 @@
                     BASE_DE_CASOS = parsedData;
                     isExampleData = false;
                     csvStatus.textContent = `${parsedData.length} filmes carregados com sucesso do CSV!`;
-                    csvStatus.className = "mt-2 text-sm status-success"; // Verde para sucesso
+                    csvStatus.className = "mt-2 text-sm text-green-600";
                 } else {
                     csvStatus.textContent = "Nenhum filme válido encontrado no CSV. A usar dados de exemplo.";
-                    csvStatus.className = "mt-2 text-sm status-warning"; // Amarelo/Dourado para aviso
+                    csvStatus.className = "mt-2 text-sm text-yellow-600";
                     BASE_DE_CASOS = exampleData;
                     isExampleData = true;
                 }
             } catch (error) {
                 console.error("Erro ao carregar ou parsear CSV:", error);
                 csvStatus.textContent = `Erro ao carregar CSV: ${error.message}. Verifique URL, formato e CORS. A usar dados de exemplo.`;
-                csvStatus.className = "mt-2 text-sm status-error"; // Vermelho para erro
+                csvStatus.className = "mt-2 text-sm text-red-600";
                 BASE_DE_CASOS = exampleData;
                 isExampleData = true;
             } finally {
-                updateDataBasedInputs(); // Atualiza inputs com base nos dados carregados (ou de exemplo)
                 searchButton.disabled = false;
             }
         }
@@ -719,34 +548,31 @@
             return union.size === 0 ? 0.0 : intersection.size / union.size;
         }
 
-        function similaridadeNumericaNormalizada(val1, val2, rangeKey) {
+        function similaridadeNumericaNormalizada(val1, val2, minVal, maxVal) {
             if (val1 === null || val2 === null || typeof val1 !== 'number' || typeof val2 !== 'number') return 0.0;
-
-            const range = RANGES[rangeKey]; // Usa o range calculado/padrão
-            if (!range || range.min === Infinity || range.max === -Infinity) return (val1 === val2) ? 1.0 : 0.0; // Se range inválido
-
-            const maxDiff = range.max - range.min;
-            if (maxDiff <= 0) return (val1 === val2) ? 1.0 : 0.0;
+            if (minVal === null || maxVal === null) return (val1 === val2) ? 1.0 : 0.0;
+            const maxDiff = maxVal - minVal;
+            if (maxDiff <= 0) return (val1 === val2) ? 1.0 : 0.0; // Evita divisão por zero ou negativo
             const diff = Math.abs(val1 - val2);
-            // Garante que valores fora do range ainda resultem em similaridade entre 0 e 1
-            const clampedDiff = Math.max(0, Math.min(diff, maxDiff));
-            const sim = 1.0 - (clampedDiff / maxDiff);
-            return sim; // Já está entre 0 e 1
+            const sim = 1.0 - (diff / maxDiff);
+            return Math.max(0.0, sim);
         }
 
-
         function similaridadeOrdinalMpaa(val1Str, val2Str) {
-            const sVal1 = normalizeRatingJS(val1Str || "Unrated"); // Normaliza antes de usar
-            const sVal2 = normalizeRatingJS(val2Str || "Unrated");
-
-            const val1Num = CLASSIFICACAO_MPAA_MAPA_ORDINAL[sVal1];
-            const val2Num = CLASSIFICACAO_MPAA_MAPA_ORDINAL[sVal2];
-
-            // Se um ou ambos não estão no MAPA ordinal (pode ser valor não padrão), compara strings
-            if (val1Num === undefined || val2Num === undefined) {
-                return (sVal1 === sVal2) ? 1.0 : 0.0;
+            const sVal1 = (val1Str || "Unrated").trim();
+            const sVal2 = (val2Str || "Unrated").trim();
+            const normalize = (s) => {
+                const upper = s.toUpperCase();
+                const norm = upper.replace(/\s+/g, "-");
+                return CLASSIFICACAO_MPAA_MAPA_ORDINAL.hasOwnProperty(norm) ? norm :
+                    CLASSIFICACAO_MPAA_MAPA_ORDINAL.hasOwnProperty(upper) ? upper :
+                        CLASSIFICACAO_MPAA_MAPA_ORDINAL.hasOwnProperty(s) ? s : s;
             }
-
+            const val1Norm = normalize(sVal1);
+            const val2Norm = normalize(sVal2);
+            const val1Num = CLASSIFICACAO_MPAA_MAPA_ORDINAL[val1Norm];
+            const val2Num = CLASSIFICACAO_MPAA_MAPA_ORDINAL[val2Norm];
+            if (val1Num === undefined || val2Num === undefined) return (sVal1 === sVal2) ? 1.0 : 0.0;
             if (MAX_DIFF_CLASSIFICACAO_MPAA <= 0) return (val1Num === val2Num) ? 1.0 : 0.0;
             return 1.0 - (Math.abs(val1Num - val2Num) / MAX_DIFF_CLASSIFICACAO_MPAA);
         }
@@ -756,45 +582,46 @@
             if (!casoNovo || !casoBase) return 0.0;
             let similaridadesPonderadas = 0;
             let pesosEfetivamenteUsados = 0;
-
             const calcularEAdicionar = (chave, funcSimilaridade, ...args) => {
                 const peso = pesos[chave] || 0;
+                // Calcula apenas se o peso for positivo E o caso novo tiver o atributo definido
                 if (peso > 0 && casoNovo.hasOwnProperty(chave) && casoNovo[chave] !== null && casoNovo[chave] !== undefined) {
                     let valorBase = casoBase[chave];
                     let valorNovo = casoNovo[chave];
                     let podeCalcular = true;
+                    // Para similaridade numérica ou ordinal, o caso base também precisa ter um valor válido
                     if (funcSimilaridade === similaridadeNumericaNormalizada || funcSimilaridade === similaridadeOrdinalMpaa) {
-                        if (valorBase === null || valorBase === undefined) { podeCalcular = false; }
+                        if (valorBase === null || valorBase === undefined) {
+                            podeCalcular = false;
+                        }
                     } else if (funcSimilaridade === similaridadeJaccard) {
+                        // Jaccard lida com arrays vazios, então sempre pode calcular se o novo caso tiver o atributo
                         valorNovo = Array.isArray(valorNovo) ? valorNovo : [];
                         valorBase = Array.isArray(valorBase) ? valorBase : [];
                     }
                     if (podeCalcular) {
-                        // Passa a chave do range para similaridade numérica
-                        const finalArgs = funcSimilaridade === similaridadeNumericaNormalizada ? [args[0]] : args;
-                        const similaridadeLocal = funcSimilaridade(valorNovo, valorBase, ...finalArgs);
+                        const similaridadeLocal = funcSimilaridade(valorNovo, valorBase, ...args);
                         similaridadesPonderadas += similaridadeLocal * peso;
                         pesosEfetivamenteUsados += peso;
                     }
                 }
             };
-            // Passa a CHAVE do range para similaridadeNumericaNormalizada
             calcularEAdicionar('generos', similaridadeJaccard);
-            calcularEAdicionar('ano_lancamento', similaridadeNumericaNormalizada, 'ano_lancamento');
+            calcularEAdicionar('ano_lancamento', similaridadeNumericaNormalizada, MIN_ANO, MAX_ANO);
             calcularEAdicionar('classificacao_etaria', similaridadeOrdinalMpaa);
-            calcularEAdicionar('duracao_minutos', similaridadeNumericaNormalizada, 'duracao_minutos');
-            calcularEAdicionar('avaliacao_critica', similaridadeNumericaNormalizada, 'avaliacao_critica');
-            calcularEAdicionar('votos', similaridadeNumericaNormalizada, 'votos');
-            calcularEAdicionar('orcamento', similaridadeNumericaNormalizada, 'orcamento');
-            calcularEAdicionar('bilheteria_mundial', similaridadeNumericaNormalizada, 'bilheteria_mundial');
+            calcularEAdicionar('duracao_minutos', similaridadeNumericaNormalizada, MIN_DURACAO, MAX_DURACAO);
+            calcularEAdicionar('avaliacao_critica', similaridadeNumericaNormalizada, MIN_AVALIACAO_IMDB, MAX_AVALIACAO_IMDB);
+            calcularEAdicionar('votos', similaridadeNumericaNormalizada, MIN_VOTOS, MAX_VOTOS);
+            calcularEAdicionar('orcamento', similaridadeNumericaNormalizada, MIN_ORCAMENTO, MAX_ORCAMENTO);
+            calcularEAdicionar('bilheteria_mundial', similaridadeNumericaNormalizada, MIN_BILHETERIA_MUNDIAL, MAX_BILHETERIA_MUNDIAL);
             calcularEAdicionar('diretores', similaridadeJaccard);
             calcularEAdicionar('roteiristas', similaridadeJaccard);
             calcularEAdicionar('estrelas', similaridadeJaccard);
             calcularEAdicionar('pais_origem', similaridadeJaccard);
             calcularEAdicionar('idioma', similaridadeJaccard);
-            calcularEAdicionar('vitorias', similaridadeNumericaNormalizada, 'vitorias');
-            calcularEAdicionar('indicacoes', similaridadeNumericaNormalizada, 'indicacoes');
-            calcularEAdicionar('oscars_indicados', similaridadeNumericaNormalizada, 'oscars_indicados');
+            calcularEAdicionar('vitorias', similaridadeNumericaNormalizada, MIN_VITORIAS, MAX_VITORIAS);
+            calcularEAdicionar('indicacoes', similaridadeNumericaNormalizada, MIN_INDICACOES, MAX_INDICACOES);
+            calcularEAdicionar('oscars_indicados', similaridadeNumericaNormalizada, MIN_OSCARS_INDICADOS, MAX_OSCARS_INDICADOS);
             return pesosEfetivamenteUsados === 0 ? 0.0 : similaridadesPonderadas / pesosEfetivamenteUsados;
         }
 
@@ -808,39 +635,67 @@
                 const label = document.createElement('label');
                 label.htmlFor = `peso-${atributo}`;
                 label.textContent = atributo.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                label.className = 'text-sm font-medium weight-label'; // Removido text-gray-700
+                label.className = 'text-sm font-medium text-gray-700 weight-label';
                 const slider = document.createElement('input');
                 slider.type = 'range'; slider.id = `peso-${atributo}`; slider.name = `peso-${atributo}`;
                 slider.min = '0'; slider.max = '1'; slider.step = '0.01'; slider.value = pesoAtual;
                 slider.className = 'flex-grow';
                 const valueSpan = document.createElement('span');
-                valueSpan.id = `valor-peso-${atributo}`; valueSpan.textContent = `${parseFloat(pesoAtual).toFixed(2)} / ${parseFloat(slider.max).toFixed(2)}`;
-                valueSpan.className = 'text-sm weight-value'; // Removido text-gray-600
-                slider.addEventListener('input', (e) => { valueSpan.textContent = `${parseFloat(e.target.value).toFixed(2)} / ${parseFloat(e.target.max).toFixed(2)}`; });
+                valueSpan.id = `valor-peso-${atributo}`; valueSpan.textContent = parseFloat(pesoAtual).toFixed(2);
+                valueSpan.className = 'text-sm text-gray-600 weight-value';
+                slider.addEventListener('input', (e) => { valueSpan.textContent = parseFloat(e.target.value).toFixed(2); });
                 div.appendChild(label); div.appendChild(slider); div.appendChild(valueSpan);
                 weightsForm.appendChild(div);
             }
         }
 
-        // Não precisa mais popular datalist aqui, será feito após carregar CSV
-        // function popularDatalistMPAA() { ... }
+        function popularDatalistMPAA() {
+            mpaaDatalist.innerHTML = '';
+            CLASSIFICACOES_MPAA_POSSIVEIS.forEach(rating => {
+                const option = document.createElement('option'); option.value = rating;
+                mpaaDatalist.appendChild(option);
+            });
+        }
 
         function obterEntradaUsuario() {
             const formData = new FormData(form);
             const novoCaso = {};
             const pesosAtuais = {};
-            const generos = formData.get('generos'); if (generos) novoCaso.generos = parseCommaSeparatedString(generos);
-            const ano = formData.get('ano_lancamento'); if (ano) novoCaso.ano_lancamento = toInt(ano);
-            const classificacao = formData.get('classificacao_etaria'); if (classificacao) novoCaso.classificacao_etaria = classificacao.trim() || null;
-            const duracao = formData.get('duracao_minutos'); if (duracao) novoCaso.duracao_minutos = toInt(duracao);
-            const avaliacao = formData.get('avaliacao_critica'); if (avaliacao) novoCaso.avaliacao_critica = toFloat(avaliacao);
-            const votos = formData.get('votos'); if (votos) novoCaso.votos = toInt(votos);
-            const estrelas = formData.get('estrelas'); if (estrelas) novoCaso.estrelas = parseCommaSeparatedString(estrelas);
-            const diretores = formData.get('diretores'); if (diretores) novoCaso.diretores = parseCommaSeparatedString(diretores);
-            const roteiristas = formData.get('roteiristas'); if (roteiristas) novoCaso.roteiristas = parseCommaSeparatedString(roteiristas);
-            for (const key in novoCaso) { if (novoCaso[key] === null || (Array.isArray(novoCaso[key]) && novoCaso[key].length === 0)) { delete novoCaso[key]; } }
+
+            // Coleta dados do filme desejado
+            const generos = formData.get('generos');
+            if (generos) novoCaso.generos = parseCommaSeparatedString(generos);
+            const ano = formData.get('ano_lancamento');
+            if (ano) novoCaso.ano_lancamento = toInt(ano);
+            const classificacao = formData.get('classificacao_etaria');
+            if (classificacao) novoCaso.classificacao_etaria = classificacao.trim() || null;
+            const duracao = formData.get('duracao_minutos');
+            if (duracao) novoCaso.duracao_minutos = toInt(duracao);
+            const avaliacao = formData.get('avaliacao_critica');
+            if (avaliacao) novoCaso.avaliacao_critica = toFloat(avaliacao);
+            const votos = formData.get('votos');
+            if (votos) novoCaso.votos = toInt(votos);
+            const estrelas = formData.get('estrelas');
+            if (estrelas) novoCaso.estrelas = parseCommaSeparatedString(estrelas);
+            const diretores = formData.get('diretores');
+            if (diretores) novoCaso.diretores = parseCommaSeparatedString(diretores);
+            const roteiristas = formData.get('roteiristas'); // Coleta roteiristas
+            if (roteiristas) novoCaso.roteiristas = parseCommaSeparatedString(roteiristas);
+
+            // Remove chaves com valores nulos ou arrays vazios do novoCaso
+            for (const key in novoCaso) {
+                if (novoCaso[key] === null || (Array.isArray(novoCaso[key]) && novoCaso[key].length === 0)) {
+                    delete novoCaso[key];
+                }
+            }
+
+            // Coleta pesos ajustados
             const weightInputs = weightsForm.querySelectorAll('input[type="range"]');
-            weightInputs.forEach(input => { const atributo = input.name.replace('peso-', ''); pesosAtuais[atributo] = parseFloat(input.value); });
+            weightInputs.forEach(input => {
+                const atributo = input.name.replace('peso-', '');
+                pesosAtuais[atributo] = parseFloat(input.value);
+            });
+
             return { novoCaso, pesosAtuais };
         }
 
@@ -849,6 +704,7 @@
             resultsOutput.innerHTML = ''; searchCriteriaDiv.innerHTML = ''; weightsUsedDiv.innerHTML = '';
             noResultsDiv.classList.add('hidden');
 
+            // Exibe Critérios da Busca
             const criteriaList = document.createElement('ul'); criteriaList.className = 'list-disc list-inside space-y-1';
             let criteriaFound = false;
             for (const chave in casoEntrada) {
@@ -860,6 +716,7 @@
             if (!criteriaFound) searchCriteriaDiv.textContent = "Nenhum critério específico fornecido.";
             else searchCriteriaDiv.appendChild(criteriaList);
 
+            // Exibe Pesos Utilizados
             const weightsList = document.createElement('ul'); weightsList.className = 'list-disc list-inside space-y-1';
             let weightsFound = false;
             for (const chave in pesosUsados) {
@@ -872,6 +729,7 @@
             if (!weightsFound) weightsUsedDiv.textContent = "Nenhum peso maior que zero utilizado.";
             else weightsUsedDiv.appendChild(weightsList);
 
+            // Filtra e exibe os Top N Filmes
             const casosParaExibir = casosOrdenados.filter(c => c.similaridade > 0).slice(0, topN);
             if (casosParaExibir.length === 0) {
                 noResultsDiv.classList.remove('hidden'); return;
@@ -880,34 +738,48 @@
             casosParaExibir.forEach(item => {
                 const filme = item.caso; const similaridade = item.similaridade;
                 const div = document.createElement('div');
-                // Adicionada classe .result-card para estilização CSS
-                div.className = 'result-card p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-150 flex flex-col';
+                // Adiciona classes para o card dentro do grid
+                div.className = 'p-4 border border-gray-200 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-150 flex flex-col'; // flex-col para organização interna
 
-                let content = `<h3 class="text-lg font-semibold mb-1">${filme.titulo || 'N/A'} (${filme.ano_lancamento || 'N/A'})</h3>`;
-                content += `<p class="text-sm font-medium text-yellow-300 mb-3">Similaridade: ${(similaridade * 100).toFixed(2)}%</p>`; // Cor dourada para similaridade
-                content += '<div class="text-xs space-y-1 overflow-y-auto flex-grow mb-2">'; // Removido text-gray-600
+                let content = `<h3 class="text-lg font-semibold text-blue-700 mb-1">${filme.titulo || 'N/A'} (${filme.ano_lancamento || 'N/A'})</h3>`;
+                content += `<p class="text-sm font-medium text-green-600 mb-3">Similaridade: ${(similaridade * 100).toFixed(2)}%</p>`;
+
+                // Container para detalhes com scroll se necessário
+                content += '<div class="text-xs text-gray-600 space-y-1 overflow-y-auto flex-grow mb-2">'; // flex-grow faz esta div ocupar espaço
+
+                // Detalhes principais
                 if (filme.generos && filme.generos.length > 0) content += `<p><span class="font-medium">Gêneros:</span> ${filme.generos.join(', ')}</p>`;
                 if (filme.duracao_minutos) content += `<p><span class="font-medium">Duração:</span> ${filme.duracao_minutos} min</p>`;
                 if (filme.classificacao_etaria) content += `<p><span class="font-medium">Classificação:</span> ${filme.classificacao_etaria}</p>`;
                 if (filme.avaliacao_critica) content += `<p><span class="font-medium">Avaliação IMDb:</span> ${filme.avaliacao_critica}/10 (${(filme.votos || 0).toLocaleString('pt-BR')} votos)</p>`;
+
+                // Elenco e Equipe
                 if (filme.diretores && filme.diretores.length > 0) content += `<p><span class="font-medium">Diretor(es):</span> ${filme.diretores.join(', ')}</p>`;
                 if (filme.roteiristas && filme.roteiristas.length > 0) content += `<p><span class="font-medium">Roteirista(s):</span> ${filme.roteiristas.join(', ')}</p>`;
                 if (filme.estrelas && filme.estrelas.length > 0) content += `<p><span class="font-medium">Estrelas:</span> ${filme.estrelas.join(', ')}</p>`;
+
+                // Detalhes de Produção
                 if (filme.pais_origem && filme.pais_origem.length > 0) content += `<p><span class="font-medium">País:</span> ${filme.pais_origem.join(', ')}</p>`;
                 if (filme.idioma && filme.idioma.length > 0) content += `<p><span class="font-medium">Idioma(s):</span> ${filme.idioma.join(', ')}</p>`;
                 if (filme.orcamento) content += `<p><span class="font-medium">Orçamento:</span> ${formatCurrency(filme.orcamento)}</p>`;
                 if (filme.bilheteria_mundial) content += `<p><span class="font-medium">Bilheteria Mundial:</span> ${formatCurrency(filme.bilheteria_mundial)}</p>`;
+
+                // Prêmios
                 let premiosStr = '';
                 if (filme.vitorias) premiosStr += `${filme.vitorias} Vit.`;
                 if (filme.indicacoes) premiosStr += `${premiosStr ? ' / ' : ''}${filme.indicacoes} Indic.`;
                 if (filme.oscars_indicados) premiosStr += `${premiosStr ? ' / ' : ''}${filme.oscars_indicados} Indic. Oscar`;
                 if (premiosStr) content += `<p><span class="font-medium">Prêmios:</span> ${premiosStr}</p>`;
-                content += '</div>';
-                if (filme.link && filme.link !== '#') { // Não mostra link inválido
-                    content += `<div class="mt-auto pt-2 border-t border-purple-800 text-center">`; // Borda roxa mais escura
-                    content += `<a href="${filme.link}" target="_blank" class="text-xs hover:underline">Ver no IMDb</a>`; // Cor do link virá do .result-card a
+
+                content += '</div>'; // Fim do container de detalhes
+
+                // Link IMDb (se houver) - colocado no final
+                if (filme.link) {
+                    content += `<div class="mt-auto pt-2 border-t border-gray-100 text-center">`; // mt-auto empurra para baixo
+                    content += `<a href="${filme.link}" target="_blank" class="text-xs text-blue-500 hover:underline">Ver no IMDb</a>`;
                     content += `</div>`;
                 }
+
                 div.innerHTML = content;
                 resultsOutput.appendChild(div);
             });
@@ -920,16 +792,14 @@
             await new Promise(resolve => setTimeout(resolve, 50));
 
             const { novoCaso, pesosAtuais } = obterEntradaUsuario();
-            const topN = parseInt(numResultsSlider.value, 10);
+            const topN = parseInt(numResultsSlider.value, 10); // Pega o valor do slider
 
             if (Object.keys(novoCaso).length === 0) {
                 const messageBox = document.createElement('div');
                 messageBox.style.position = 'fixed'; messageBox.style.top = '20px'; messageBox.style.left = '50%';
                 messageBox.style.transform = 'translateX(-50%)'; messageBox.style.padding = '10px 20px';
-                messageBox.style.backgroundColor = '#DAA520'; // Dourado Ocre para fundo
-                messageBox.style.color = '#2C1F3D'; // Roxo Escuro Profundo para texto
-                messageBox.style.border = '1px solid #FFD700'; // Dourado Clássico para borda
-                messageBox.style.borderRadius = '0.25rem';
+                messageBox.style.backgroundColor = '#f8d7da'; messageBox.style.color = '#721c24';
+                messageBox.style.border = '1px solid #f5c6cb'; messageBox.style.borderRadius = '0.25rem';
                 messageBox.style.zIndex = '1000';
                 messageBox.textContent = "Por favor, forneça pelo menos um critério para a busca.";
                 document.body.appendChild(messageBox);
@@ -945,17 +815,20 @@
             }
             const casosOrdenados = resultadosSimilaridade.sort((a, b) => b.similaridade - a.similaridade);
             loadingIndicator.classList.add('hidden');
-            exibirResultados(novoCaso, casosOrdenados, pesosAtuais, topN);
+            exibirResultados(novoCaso, casosOrdenados, pesosAtuais, topN); // Passa topN
         }
 
         // --- Inicialização ---
         document.addEventListener('DOMContentLoaded', async () => {
             popularPesos();
-            // popularDatalistMPAA(); // Removido daqui, será chamado após carregar CSV
-            numResultsValueSpan.textContent = `${numResultsSlider.value} / ${numResultsSlider.max}`;
-            numResultsSlider.addEventListener('input', (e) => { numResultsValueSpan.textContent = `${e.target.value} / ${e.target.max}`; });
+            popularDatalistMPAA();
+            // Atualiza o valor exibido do slider de resultados
+            numResultsValueSpan.textContent = numResultsSlider.value;
+            numResultsSlider.addEventListener('input', (e) => {
+                numResultsValueSpan.textContent = e.target.value;
+            });
             searchButton.addEventListener('click', handleSearch);
-            await loadCSVFromURL(CSV_FILE_URL); // Carrega o CSV e atualiza inputs
+            await loadCSVFromURL(CSV_FILE_URL); // Carrega o CSV automaticamente
         });
     </script>
 </body>

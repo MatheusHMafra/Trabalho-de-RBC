@@ -12,9 +12,43 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            /* Cinza claro de fundo */
+            background-color: #2C1F3D;
+            color: #EAE0FC;
         }
+
+        .container {
+            background-color: #3E2C51;
+            border: 1px solid #DAA520;
+        }
+
+        h1,
+        h2 {
+            color: #FFD700;
+            border-bottom-color: #DAA520;
+        }
+
+        label {
+            color: #D8BFD8;
+        }
+
+        input[type=text],
+        input[type=number],
+        select,
+        textarea {
+            background-color: #251A33;
+            color: #EAE0FC;
+            border: 1px solid #7F00FF;
+            border-radius: 0.375rem;
+        }
+
+        input[type=text]:focus,
+        input[type=number]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #FFD700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+        }
+
 
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
@@ -28,7 +62,7 @@
         }
 
         ::placeholder {
-            color: #9ca3af;
+            color: #A094B7;
             opacity: 1;
         }
 
@@ -37,11 +71,10 @@
             appearance: none;
             width: 100%;
             height: 8px;
-            background: #d1d5db;
-            /* Cor da trilha */
+            background: #5A3973;
             border-radius: 5px;
             outline: none;
-            opacity: 0.7;
+            opacity: 0.8;
             transition: opacity .2s;
         }
 
@@ -54,42 +87,38 @@
             appearance: none;
             width: 18px;
             height: 18px;
-            background: #3b82f6;
-            /* Cor do polegar (azul) */
+            background: #FFD700;
             border-radius: 50%;
             cursor: pointer;
+            border: 2px solid #2C1F3D;
         }
 
         input[type=range]::-moz-range-thumb {
             width: 18px;
             height: 18px;
-            background: #3b82f6;
-            /* Cor do polegar (azul) */
+            background: #FFD700;
             border-radius: 50%;
             cursor: pointer;
-            border: none;
-            /* Remove a borda padrão do Firefox */
+            border: 2px solid #2C1F3D;
         }
 
         .weight-label {
             min-width: 150px;
-            /* Garante alinhamento */
             display: inline-block;
+            color: #D8BFD8;
         }
 
         .weight-value {
-            min-width: 40px;
-            /* Espaço para o valor do peso */
+            min-width: 85px;
             display: inline-block;
             text-align: right;
             font-weight: 500;
+            color: #EAE0FC;
         }
 
         .loader {
-            border: 4px solid #f3f4f6;
-            /* Light grey */
-            border-top: 4px solid #3b82f6;
-            /* Blue */
+            border: 4px solid #5A3973;
+            border-top: 4px solid #FFD700;
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -107,17 +136,15 @@
             }
         }
 
-        /* Estilo para o grid de resultados */
+
         #results-output {
             display: grid;
-            /* Cria colunas que se ajustam automaticamente */
-            /* Cada coluna terá no mínimo 280px e no máximo 1 fração do espaço disponível */
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1rem;
-            /* Espaçamento entre os cards */
+
         }
 
-        /* Ajustes responsivos */
+
         @media (max-width: 768px) {
             .md\:grid-cols-2 {
                 grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -145,108 +172,169 @@
                 padding-left: 0;
             }
 
-            /* Garante que o grid tenha pelo menos uma coluna em telas pequenas */
             #results-output {
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             }
+        }
+
+        .result-card {
+            background-color: #3E2C51;
+            border: 1px solid #DAA520;
+            color: #EAE0FC;
+            box-shadow: 0 4px 6px rgba(218, 165, 32, 0.1);
+            outline: 1px solid #FFD700;
+        }
+
+        .result-card h3 {
+            color: #FFD700;
+        }
+
+        .result-card p {
+            color: #EAE0FC;
+        }
+
+
+        .status-loading {
+            color: #FFD700;
+        }
+
+        .status-success {
+            color: #4CAF50;
+        }
+
+        .status-warning {
+            color: #FF9800;
+        }
+
+        .status-error {
+            color: #F44336;
+        }
+
+
+        #search-button {
+            background-color: #6A5ACD;
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #search-button:hover {
+            background-color: #FFD700;
+            color: #2C1F3D;
+            transform: translateY(-2px);
+        }
+
+        #search-button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
         }
     </style>
 </head>
 
 <body class="p-4 md:p-8">
-    <div class="container mx-auto max-w-7xl bg-white p-6 md:p-8 rounded-lg shadow-lg">
+    <div class="container mx-auto max-w-7xl p-6 md:p-8 rounded-lg shadow-lg">
 
-        <h1 class="text-2xl md:text-3xl font-bold mb-6 text-center text-gray-800">Recomendador de Filmes (CBR)</h1>
+        <h1 class="text-2xl md:text-3xl font-bold mb-6 text-center">Recomendador de Filmes (CBR)</h1>
 
-        <div class="mb-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
-            <h2 class="text-lg font-semibold mb-2 text-gray-700">Estado da Base de Filmes</h2>
-            <p id="csv-status" class="text-sm text-gray-500">A carregar base de filmes...</p>
+        <div class="mb-8 p-4 border border-purple-700 rounded-lg bg-purple-900/30">
+            <h2 class="text-lg font-semibold mb-2">Estado da Base de Filmes</h2>
+            <p id="csv-status" class="text-sm">A carregar base de filmes...</p>
         </div>
 
 
         <div class="md:flex mb-8">
             <div class="md:w-1/2 md:pr-2">
-                <h2 class="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Filme Desejado</h2>
+                <h2 class="text-xl font-semibold mb-4 border-b pb-2">Filme Desejado</h2>
                 <form id="cbr-form" class="space-y-4">
                     <div>
-                        <label for="generos" class="block text-sm font-medium text-gray-700">Gêneros (separados por
+                        <label for="generos" class="block text-sm font-medium">Gêneros (separados por
                             vírgula):</label>
                         <input type="text" id="generos" name="generos" placeholder="Ex: Action, Sci-Fi"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            list="generos-list"
+                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+                        <datalist id="generos-list"></datalist>
                     </div>
                     <div>
-                        <label for="ano_lancamento" class="block text-sm font-medium text-gray-700">Ano de Lançamento
+                        <label for="ano_lancamento" class="block text-sm font-medium">Ano de Lançamento
                             (aprox.):</label>
-                        <input type="number" id="ano_lancamento" name="ano_lancamento" placeholder="Ex: 1999" min="1900"
-                            max="2025"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <input type="number" id="ano_lancamento" name="ano_lancamento" placeholder="Ex: 1999"
+                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
                     </div>
                     <div>
-                        <label for="classificacao_etaria" class="block text-sm font-medium text-gray-700">Classificação
+                        <label for="classificacao_etaria" class="block text-sm font-medium">Classificação
                             Etária:</label>
                         <input type="text" id="classificacao_etaria" name="classificacao_etaria"
                             placeholder="Ex: R, PG-13, G, Unrated" list="mpaa-list"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <datalist id="mpaa-list">
-                        </datalist>
+                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+                        <datalist id="mpaa-list"></datalist>
                     </div>
                     <div>
-                        <label for="duracao_minutos" class="block text-sm font-medium text-gray-700">Duração (minutos
+                        <label for="duracao_minutos" class="block text-sm font-medium">Duração (minutos
                             aprox.):</label>
-                        <input type="number" id="duracao_minutos" name="duracao_minutos" placeholder="Ex: 120" min="1"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <input type="number" id="duracao_minutos" name="duracao_minutos" placeholder="Ex: 120"
+                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
                     </div>
                     <div>
-                        <label for="avaliacao_critica" class="block text-sm font-medium text-gray-700">Avaliação IMDb
+                        <label for="avaliacao_critica" class="block text-sm font-medium">Avaliação IMDb
                             Mínima:</label>
                         <input type="number" id="avaliacao_critica" name="avaliacao_critica" placeholder="Ex: 7.5"
-                            step="0.1" min="0" max="10"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            step="0.1"
+                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
                     </div>
                     <div>
-                        <label for="votos" class="block text-sm font-medium text-gray-700">Votos IMDb Mínimos:</label>
-                        <input type="number" id="votos" name="votos" placeholder="Ex: 100000" min="0"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <label for="votos" class="block text-sm font-medium">Votos IMDb Mínimos:</label>
+                        <input type="number" id="votos" name="votos" placeholder="Ex: 100000"
+                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
                     </div>
                     <div>
-                        <label for="estrelas" class="block text-sm font-medium text-gray-700">Estrelas (separados por
+                        <label for="estrelas" class="block text-sm font-medium">Estrelas (separados por
                             vírgula):</label>
                         <input type="text" id="estrelas" name="estrelas" placeholder="Ex: Keanu Reeves, Tom Hanks"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            list="estrelas-list"
+                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+                        <datalist id="estrelas-list"></datalist>
                     </div>
                     <div>
-                        <label for="diretores" class="block text-sm font-medium text-gray-700">Diretor(es) (separados
+                        <label for="diretores" class="block text-sm font-medium">Diretor(es) (separados
                             por vírgula):</label>
                         <input type="text" id="diretores" name="diretores" placeholder="Ex: Christopher Nolan"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            list="diretores-list"
+                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+                        <datalist id="diretores-list"></datalist>
                     </div>
                     <div>
-                        <label for="roteiristas" class="block text-sm font-medium text-gray-700">Roteirista(s)
+                        <label for="roteiristas" class="block text-sm font-medium">Roteirista(s)
                             (separados por vírgula):</label>
                         <input type="text" id="roteiristas" name="roteiristas" placeholder="Ex: Quentin Tarantino"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            list="roteiristas-list"
+                            class="mt-1 block w-full px-3 py-2 shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm">
+                        <datalist id="roteiristas-list"></datalist>
                     </div>
                 </form>
             </div>
 
             <div class="md:w-1/2 md:pl-4">
-                <h2 class="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Ajustar Pesos (Importância)</h2>
+                <h2 class="text-xl font-semibold mb-4 border-b pb-2">Ajustar Pesos (Importância)</h2>
                 <div id="weights-form" class="space-y-3">
                 </div>
             </div>
         </div>
 
         <div class="mb-6 max-w-md mx-auto">
-            <label for="num_results_slider" class="block text-sm font-medium text-gray-700 mb-1 text-center">Número de
-                Recomendações: <span id="num_results_value">10</span></label>
+            <label for="num_results_slider" class="block text-sm font-medium mb-1 text-center">Número de
+                Recomendações: <span id="num_results_value">10 / 50</span></label>
             <input type="range" id="num_results_slider" name="num_results_slider" min="5" max="50" value="10"
-                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                class="w-full h-2 rounded-lg appearance-none cursor-pointer">
         </div>
 
 
         <div class="text-center mb-8">
             <button id="search-button"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow transition duration-150 ease-in-out"
+                class="bg-purple-600 hover:bg-yellow-500 text-white hover:text-purple-900 font-bold py-2 px-6 rounded-lg shadow transition duration-150 ease-in-out"
                 disabled>
                 Buscar Recomendações
             </button>
@@ -255,24 +343,24 @@
         <div id="results-section" class="mt-8 hidden">
             <div class="md:flex mb-6">
                 <div class="md:w-1/2 md:pr-2 mb-4 md:mb-0">
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700 border-b pb-2">Critérios da Busca</h2>
+                    <h2 class="text-xl font-semibold mb-3 border-b pb-2">Critérios da Busca</h2>
                     <div id="search-criteria"
-                        class="text-sm text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-200 h-48 overflow-y-auto">
+                        class="text-sm p-4 rounded-lg border border-purple-700 bg-purple-900/30 h-48 overflow-y-auto">
                     </div>
                 </div>
                 <div class="md:w-1/2 md:pl-2">
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700 border-b pb-2">Pesos Utilizados</h2>
+                    <h2 class="text-xl font-semibold mb-3 border-b pb-2">Pesos Utilizados</h2>
                     <div id="weights-used"
-                        class="text-sm text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-200 h-48 overflow-y-auto">
+                        class="text-sm p-4 rounded-lg border border-purple-700 bg-purple-900/30 h-48 overflow-y-auto">
                     </div>
                 </div>
             </div>
 
-            <h2 class="text-xl md:text-2xl font-semibold mb-4 text-gray-700 border-b pb-2">Filmes Recomendados</h2>
+            <h2 class="text-xl md:text-2xl font-semibold mb-4 border-b pb-2">Filmes Recomendados</h2>
             <div id="loading-indicator" class="loader hidden"></div>
             <div id="results-output" class="mt-4">
             </div>
-            <div id="no-results" class="text-center text-gray-500 py-4 hidden">
+            <div id="no-results" class="text-center py-4 hidden">
                 Nenhum filme encontrado com os critérios e pesos fornecidos.
             </div>
         </div>
@@ -280,29 +368,39 @@
 
     <script>
         // --- 1. Constantes e Dados Globais ---
+        // REQUISITO RBC: O sistema deve ter uma base de casos. Esta URL aponta para o arquivo CSV com os filmes.
+        // O programa deve ter cadastrados numa base os casos (pelo menos 50).
+        const CSV_FILE_URL = "https://raw.githubusercontent.com/MatheusHMafra/Trabalho-de-RBC/refs/heads/main/filmes_base_novo.csv";
 
-        // !!! IMPORTANTE: COLOQUE O URL DO SEU ARQUIVO CSV AQUI !!!
-        const CSV_FILE_URL = "filmes_base_novo.csv";
-
-        const CLASSIFICACOES_MPAA_POSSIVEIS = [
+        // REQUISITO RBC: Definição de atributos e como eles são comparados (métrica de similaridade local).
+        // Para o atributo 'classificacao_etaria', que é ordinal, definimos uma ordem.
+        const CLASSIFICACOES_MPAA_ORDEM = [
             "Unrated", "Not Rated", "Unknown", "Approved", "Passed", "K-A", "TV-Y",
             "G", "TV-G", "GP", "M", "PG", "TV-PG", "M/PG", "TV-Y7", "TV-Y7-FV",
             "13+", "PG-13", "TV-13", "TV-14", "16+", "R", "MA-17", "TV-MA",
             "NC-17", "X", "18+"
         ];
-        const CLASSIFICACAO_MPAA_MAPA_ORDINAL = CLASSIFICACOES_MPAA_POSSIVEIS.reduce((map, val, i) => { map[val] = i; return map; }, {});
-        const MAX_DIFF_CLASSIFICACAO_MPAA = CLASSIFICACOES_MPAA_POSSIVEIS.length - 1;
+        // Mapa para facilitar o cálculo da similaridade ordinal para 'classificacao_etaria'.
+        const CLASSIFICACAO_MPAA_MAPA_ORDINAL = CLASSIFICACOES_MPAA_ORDEM.reduce((map, val, i) => { map[val] = i; return map; }, {});
+        const MAX_DIFF_CLASSIFICACAO_MPAA = CLASSIFICACOES_MPAA_ORDEM.length - 1;
 
-        const MIN_ANO = 1920; const MAX_ANO = new Date().getFullYear();
-        const MIN_DURACAO = 30; const MAX_DURACAO = 300;
-        const MIN_AVALIACAO_IMDB = 0.0; const MAX_AVALIACAO_IMDB = 10.0;
-        const MIN_VOTOS = 0; const MAX_VOTOS = 3000000;
-        const MIN_ORCAMENTO = 1000; const MAX_ORCAMENTO = 500000000;
-        const MIN_BILHETERIA_MUNDIAL = 0; const MAX_BILHETERIA_MUNDIAL = 3000000000;
-        const MIN_VITORIAS = 0; const MAX_VITORIAS = 200;
-        const MIN_INDICACOES = 0; const MAX_INDICACOES = 300;
-        const MIN_OSCARS_INDICADOS = 0; const MAX_OSCARS_INDICADOS = 50;
+        // REQUISITO RBC: Definição de atributos.
+        // Valores MÍNIMOS/MÁXIMOS PADRÃO para atributos numéricos. Serão sobrepostos pelos dados reais do CSV.
+        // Estes ranges são cruciais para a métrica de similaridade numérica normalizada.
+        let RANGES = {
+            ano_lancamento: { min: 1920, max: new Date().getFullYear() },
+            duracao_minutos: { min: 30, max: 300 },
+            avaliacao_critica: { min: 0.0, max: 10.0 },
+            votos: { min: 0, max: 3000000 },
+            orcamento: { min: 1000, max: 500000000 },
+            bilheteria_mundial: { min: 0, max: 3000000000 },
+            vitorias: { min: 0, max: 200 },
+            indicacoes: { min: 0, max: 300 },
+            oscars_indicados: { min: 0, max: 50 }
+        };
 
+        // REQUISITO RBC: Definição de pesos dos atributos.
+        // Estes são os pesos default propostos na modelagem do RBC. O usuário poderá alterá-los.
         const PESOS_PADRAO = {
             generos: 0.20, ano_lancamento: 0.10, classificacao_etaria: 0.10,
             duracao_minutos: 0.05, avaliacao_critica: 0.15, votos: 0.05,
@@ -311,10 +409,12 @@
             vitorias: 0.03, indicacoes: 0.02, oscars_indicados: 0.01
         };
 
+        // REQUISITO RBC: Base de casos. Este array armazenará os filmes carregados do CSV.
         let BASE_DE_CASOS = [];
-        let isExampleData = true;
+        let isExampleData = true; // Flag para indicar se os dados são de exemplo (fallback)
 
-        // --- Elementos do DOM ---
+        // --- Elementos do DOM (Interface) ---
+        // Referências aos elementos HTML para manipulação via JavaScript.
         const csvStatus = document.getElementById('csv-status');
         const form = document.getElementById('cbr-form');
         const weightsForm = document.getElementById('weights-form');
@@ -326,13 +426,25 @@
         const loadingIndicator = document.getElementById('loading-indicator');
         const noResultsDiv = document.getElementById('no-results');
         const mpaaDatalist = document.getElementById('mpaa-list');
+        const generosDatalist = document.getElementById('generos-list');
+        const estrelasDatalist = document.getElementById('estrelas-list');
+        const diretoresDatalist = document.getElementById('diretores-list');
+        const roteiristasDatalist = document.getElementById('roteiristas-list');
         const numResultsSlider = document.getElementById('num_results_slider');
         const numResultsValueSpan = document.getElementById('num_results_value');
 
         // --- 2. Funções Auxiliares de Parsing e Conversão ---
+        // Estas funções ajudam a processar os dados brutos do CSV e da entrada do usuário
+        // para a REPRENTAÇÃO DO CASO adequada.
+
+        /**
+         * Converte uma string de valores separados por vírgula em um array.
+         * Lida com valores que podem estar entre aspas.
+         * Ex: "Action, \"Sci-Fi\", Comedy" -> ["Action", "Sci-Fi", "Comedy"]
+         * Utilizado para atributos multivalorados como 'generos', 'estrelas'.
+         */
         function parseCommaSeparatedString(valueStr) {
             if (!valueStr || typeof valueStr !== 'string') return [];
-            // Lida com strings que podem estar entre aspas
             const values = [];
             let currentVal = '';
             let inQuotes = false;
@@ -346,16 +458,18 @@
                     currentVal += char;
                 }
             }
-            values.push(currentVal.trim()); // Adiciona o último valor
-            return values.filter(item => item); // Remove itens vazios
+            values.push(currentVal.trim());
+            return values.map(v => v.replace(/^"|"$/g, '')).filter(item => item);
         }
 
+        /** Converte um valor para inteiro, limpando caracteres não numéricos. */
         function toInt(val) {
             if (val === null || val === undefined || val === '') return null;
             const num = parseInt(String(val).replace(/[^\d-]/g, ''), 10);
             return isNaN(num) ? null : num;
         }
 
+        /** Converte um valor para float, limpando caracteres não numéricos e tratando vírgula como ponto decimal. */
         function toFloat(val) {
             if (val === null || val === undefined || val === '') return null;
             const strVal = String(val).replace(',', '.');
@@ -363,6 +477,11 @@
             return isNaN(num) ? null : num;
         }
 
+        /**
+         * Converte strings de duração em formatos variados para um total de minutos.
+         * Ex: "120 min", "2h 30m", "PT2H10M" -> minutos correspondentes.
+         * Importante para o atributo 'duracao_minutos'.
+         */
         function parseDurationToMinutesJS(durationStr) {
             if (!durationStr || typeof durationStr !== 'string') return null;
             const durationStrLower = String(durationStr).toLowerCase().trim();
@@ -374,7 +493,7 @@
             const mMatch = durationStrLower.match(/(\d+)m/);
             if (mMatch) minutes = parseInt(mMatch[1], 10);
             if (hours > 0 || minutes > 0) return hours * 60 + minutes;
-            if (durationStrLower.startsWith("pt")) {
+            if (durationStrLower.startsWith("pt")) { // Formato ISO 8601 Duration (simplificado)
                 const durationStrIso = durationStrLower.substring(2);
                 let hVal = 0; let mVal = 0;
                 const ptHMatch = durationStrIso.match(/(\d+)h/);
@@ -383,36 +502,49 @@
                 if (ptMMatch) mVal = parseInt(ptMMatch[1], 10);
                 if (hVal > 0 || mVal > 0) return hVal * 60 + mVal;
             }
-            try {
+            try { // Tenta converter diretamente para inteiro se for apenas um número
                 const directInt = parseInt(durationStr, 10);
                 if (!isNaN(directInt)) return directInt;
-            } catch (e) { /* Ignora */ }
-            return null;
+            } catch (e) {  /* ignora erro */ }
+            return null; // Retorna null se não conseguir parsear
         }
 
+        /**
+         * Normaliza a string da classificação etária para um dos valores padrão.
+         * Usado para o atributo 'classificacao_etaria'.
+         */
         function normalizeRatingJS(ratingRaw) {
             if (!ratingRaw || typeof ratingRaw !== 'string') return "Unrated";
             const ratingTrimmed = ratingRaw.trim();
             if (!ratingTrimmed || ["none", "na", "n/a", "nan"].includes(ratingTrimmed.toLowerCase())) return "Unrated";
-            if (CLASSIFICACOES_MPAA_POSSIVEIS.includes(ratingTrimmed)) return ratingTrimmed;
+            if (CLASSIFICACOES_MPAA_ORDEM.includes(ratingTrimmed)) return ratingTrimmed;
             const normalizedRating = ratingTrimmed.toUpperCase().replace(/\s+/g, "-");
-            if (CLASSIFICACOES_MPAA_POSSIVEIS.includes(normalizedRating)) return normalizedRating;
-            return ratingTrimmed;
+            if (CLASSIFICACOES_MPAA_ORDEM.includes(normalizedRating)) return normalizedRating;
+            return ratingTrimmed; // Retorna original se não puder normalizar para um padrão
         }
 
-        // Função para formatar números como moeda (USD por padrão)
+        /** Formata um valor numérico como moeda USD. */
         function formatCurrency(value) {
             if (value === null || value === undefined || isNaN(value)) return 'N/A';
             return value.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
         }
 
-        // --- 3. Funções de Parsing de CSV ---
+
+        // --- 3. Funções de Parsing de CSV e Atualização de Inputs ---
+
+        /**
+         * REQUISITO RBC: Processa o texto do CSV para construir a BASE_DE_CASOS.
+         * Cada linha do CSV se torna um objeto 'movie' (um caso) com seus ATRIBUTOS.
+         * As definições técnicas (como tratar cada coluna/atributo) são aplicadas aqui.
+         */
         function parseCSV(csvText) {
             const lines = csvText.trim().split(/\r?\n/);
             if (lines.length < 2) throw new Error("CSV inválido: precisa de cabeçalho e dados.");
 
-            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            // Mapeamento do cabeçalho do CSV para os nomes internos dos atributos (REPRESENTAÇÃO DO CASO)
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/^"|"$/g, ''));
             const expectedHeaders = [
+                // { csv: 'nome_coluna_csv', internal: 'nome_atributo_interno' }
                 { csv: 'id', internal: 'id' }, { csv: 'title', internal: 'titulo' },
                 { csv: 'link', internal: 'link' }, { csv: 'year', internal: 'ano_lancamento' },
                 { csv: 'duration', internal: 'duracao_minutos' }, { csv: 'rating_mpa', internal: 'classificacao_etaria' },
@@ -424,22 +556,25 @@
                 { csv: 'win', internal: 'vitorias' }, { csv: 'nomination', internal: 'indicacoes' },
                 { csv: 'oscar', internal: 'oscars_indicados' }
             ];
-            const headerMap = {};
-            expectedHeaders.forEach(eh => {
-                const index = headers.indexOf(eh.csv.toLowerCase());
-                if (index !== -1) headerMap[index] = eh.internal;
+            const headerMap = {}; // Mapeia índice da coluna para a chave interna do atributo
+            headers.forEach((header, index) => {
+                const mapping = expectedHeaders.find(eh => eh.csv === header);
+                if (mapping) {
+                    headerMap[index] = mapping.internal;
+                }
             });
 
-            const data = [];
-            for (let i = 1; i < lines.length; i++) {
+            const data = []; // Array para armazenar os casos processados
+            for (let i = 1; i < lines.length; i++) { // Começa da segunda linha (dados)
+                // Parser simples de linha CSV que tenta lidar com vírgulas dentro de aspas
                 const values = [];
                 let currentVal = '';
                 let inQuotes = false;
                 for (let char of lines[i]) {
-                    if (char === '"' && lines[i][lines[i].indexOf(char) - 1] !== '\\') { // Lida com aspas, ignorando as escapadas (\")
+                    if (char === '"' && lines[i][lines[i].indexOf(char) - 1] !== '\\') { // Trata aspas, ignorando aspas escapadas
                         inQuotes = !inQuotes;
                     } else if (char === ',' && !inQuotes) {
-                        values.push(currentVal.trim().replace(/^"|"$/g, '').replace(/\\"/g, '"')); // Remove aspas das extremidades e desescapa as internas
+                        values.push(currentVal.trim().replace(/^"|"$/g, '').replace(/\\"/g, '"')); // Remove aspas das bordas, mantém aspas internas
                         currentVal = '';
                     } else {
                         currentVal += char;
@@ -447,15 +582,16 @@
                 }
                 values.push(currentVal.trim().replace(/^"|"$/g, '').replace(/\\"/g, '"'));
 
-
-                const movie = {};
+                const movie = {}; // Objeto para representar um caso (filme)
                 let hasUsefulData = false;
                 for (const colIndex in headerMap) {
-                    const internalKey = headerMap[colIndex];
-                    // Acessa o valor pelo índice correto
+                    const internalKey = headerMap[colIndex]; // Nome interno do atributo
                     const rawValue = values[parseInt(colIndex)] ? values[parseInt(colIndex)].trim() : null;
+
                     if (rawValue === null || rawValue === "") { movie[internalKey] = null; continue; }
-                    hasUsefulData = true;
+                    hasUsefulData = true; // Marca que a linha tem algum dado útil
+
+                    // Aplica conversões específicas para cada atributo
                     switch (internalKey) {
                         case 'id': case 'titulo': case 'link': movie[internalKey] = rawValue; break;
                         case 'ano_lancamento': movie[internalKey] = toInt(rawValue); break;
@@ -465,231 +601,382 @@
                         case 'votos': case 'vitorias': case 'indicacoes': case 'oscars_indicados':
                             movie[internalKey] = toInt(rawValue); break;
                         case 'orcamento': case 'bilheteria_mundial':
-                            movie[internalKey] = toFloat(rawValue); break;
+                            movie[internalKey] = toFloat(rawValue); break; // Mantém como float para precisão, formata na exibição
                         case 'diretores': case 'roteiristas': case 'estrelas': case 'generos':
                         case 'pais_origem': case 'idioma':
-                            movie[internalKey] = parseCommaSeparatedString(rawValue); break;
+                            movie[internalKey] = parseCommaSeparatedString(rawValue); // Atributos multivalorados
+                            break;
                         default: movie[internalKey] = rawValue;
                     }
                 }
-                if (hasUsefulData && movie.titulo) data.push(movie);
+                // Garante que campos array sejam sempre arrays, mesmo que vazios, para consistência na similaridade
+                ['diretores', 'roteiristas', 'estrelas', 'generos', 'pais_origem', 'idioma'].forEach(key => {
+                    if (!movie[key]) movie[key] = [];
+                });
+
+                if (hasUsefulData && movie.titulo) data.push(movie); // Adiciona o caso à lista se tiver dados e um título
             }
-            return data;
+            return data; // Retorna a lista de casos (filmes)
         }
 
-        async function loadCSVFromURL(url) {
-            // Dados de exemplo caso o carregamento falhe ou URL não seja definida
-            const exampleData = [
-                {
-                    "id": "ex001", "titulo": "Filme de Exemplo A (Ação)", "link": "#", "ano_lancamento": 2020, "duracao_minutos": 120,
-                    "classificacao_etaria": "PG-13", "avaliacao_critica": 7.5, "votos": 150000, "orcamento": 50000000,
-                    "bilheteria_mundial": 150000000, "diretores": ["Diretor Exemplo"], "roteiristas": ["Roteirista Exemplo"],
-                    "estrelas": ["Ator Exemplo 1", "Atriz Exemplo 1"], "generos": ["Action", "Adventure"],
-                    "pais_origem": ["USA"], "idioma": ["English"], "vitorias": 5, "indicacoes": 10, "oscars_indicados": 1
-                },
-                {
-                    "id": "ex002", "titulo": "Filme de Exemplo B (Comédia)", "link": "#", "ano_lancamento": 2019, "duracao_minutos": 95,
-                    "classificacao_etaria": "G", "avaliacao_critica": 6.8, "votos": 80000, "orcamento": 20000000,
-                    "bilheteria_mundial": 70000000, "diretores": ["Outro Diretor"], "roteiristas": ["Outro Roteirista"],
-                    "estrelas": ["Comediante Famoso", "Atriz Coadjuvante"], "generos": ["Comedy", "Family"],
-                    "pais_origem": ["Canada"], "idioma": ["English", "French"], "vitorias": 2, "indicacoes": 3, "oscars_indicados": 0
+        /** Extrai valores únicos de um campo (incluindo itens dentro de arrays), usado para popular datalists. */
+        function extractUniqueValues(key) {
+            const values = new Set();
+            BASE_DE_CASOS.forEach(caso => {
+                const val = caso[key];
+                if (Array.isArray(val)) {
+                    val.forEach(item => item && values.add(String(item).trim()));
+                } else if (val !== null && val !== undefined && String(val).trim() !== '') {
+                    values.add(String(val).trim());
                 }
+            });
+            return Array.from(values).sort();
+        }
+
+        /**
+         * Calcula min/max para um campo numérico na BASE_DE_CASOS.
+         * Fundamental para a normalização na MÉTRICA DE SIMILARIDADE numérica.
+         */
+        function calculateMinMax(key) {
+            let min = Infinity;
+            let max = -Infinity;
+            let foundValid = false;
+            BASE_DE_CASOS.forEach(caso => {
+                const val = caso[key];
+                if (val !== null && typeof val === 'number' && !isNaN(val)) {
+                    foundValid = true;
+                    if (val < min) min = val;
+                    if (val > max) max = val;
+                }
+            });
+            return foundValid ? { min, max } : RANGES[key]; // Retorna padrão se nenhum válido for encontrado
+        }
+
+        /** Popula um elemento <datalist> no HTML com opções de sugestão. */
+        function populateDatalist(datalistElement, values) {
+            if (!datalistElement) return;
+            datalistElement.innerHTML = ''; // Limpa opções antigas
+            values.forEach(value => {
+                const option = document.createElement('option');
+                option.value = value;
+                datalistElement.appendChild(option);
+            });
+        }
+
+        /** Atualiza min, max e placeholder de um input numérico na interface. */
+        function updateInputRangeAndPlaceholder(inputId, range) {
+            const inputElement = document.getElementById(inputId);
+            if (!inputElement || !range) return;
+            if (range.min !== Infinity) inputElement.min = range.min;
+            if (range.max !== -Infinity) inputElement.max = range.max;
+            inputElement.placeholder = `Ex: (${range.min !== Infinity ? range.min : 'min'} - ${range.max !== -Infinity ? range.max : 'max'})`;
+        }
+
+        /** Atualiza todos os inputs da interface (datalists, ranges numéricos) com base nos dados carregados. */
+        function updateDataBasedInputs() {
+            // Popula Datalists para campos de texto/array com valores únicos da base de casos
+            populateDatalist(generosDatalist, extractUniqueValues('generos'));
+            populateDatalist(estrelasDatalist, extractUniqueValues('estrelas'));
+            populateDatalist(diretoresDatalist, extractUniqueValues('diretores'));
+            populateDatalist(roteiristasDatalist, extractUniqueValues('roteiristas'));
+
+            const uniqueRatingsFromData = extractUniqueValues('classificacao_etaria');
+            const allPossibleRatings = [...new Set([...CLASSIFICACOES_MPAA_ORDEM, ...uniqueRatingsFromData])].sort();
+            populateDatalist(mpaaDatalist, allPossibleRatings);
+
+            // Calcula e Atualiza Ranges (min/max) para campos numéricos com base nos dados carregados
+            RANGES.ano_lancamento = calculateMinMax('ano_lancamento');
+            RANGES.duracao_minutos = calculateMinMax('duracao_minutos');
+            RANGES.avaliacao_critica = calculateMinMax('avaliacao_critica');
+            RANGES.votos = calculateMinMax('votos');
+            // ... (outros campos numéricos como orcamento, bilheteria, se forem usados no formulário de entrada principal)
+
+            // Atualiza os atributos (min, max, placeholder) dos inputs numéricos no formulário
+            updateInputRangeAndPlaceholder('ano_lancamento', RANGES.ano_lancamento);
+            updateInputRangeAndPlaceholder('duracao_minutos', RANGES.duracao_minutos);
+            updateInputRangeAndPlaceholder('avaliacao_critica', RANGES.avaliacao_critica);
+            updateInputRangeAndPlaceholder('votos', RANGES.votos);
+        }
+
+
+        /**
+         * REQUISITO RBC: Carrega a BASE_DE_CASOS a partir do CSV_FILE_URL.
+         * Garante que o sistema tenha acesso aos casos para o processo de raciocínio.
+         * Se o carregamento falhar, usa dados de exemplo (fallback).
+         * REQUISITO RBC: O programa tem que ter cadastrados numa base os casos (pelo menos 50) -
+         * isso é atendido pela capacidade de carregar um CSV externo com qualquer número de casos.
+         */
+        async function loadCSVFromURL(url) {
+            // Dados de exemplo caso o CSV não possa ser carregado (garante funcionalidade mínima)
+            const exampleData = [
+                { "id": "ex001", "titulo": "Filme de Exemplo A (Ação)", "link": "#", "ano_lancamento": 2020, "duracao_minutos": 120, "classificacao_etaria": "PG-13", "avaliacao_critica": 7.5, "votos": 150000, "orcamento": 50000000, "bilheteria_mundial": 150000000, "diretores": ["Diretor Exemplo"], "roteiristas": ["Roteirista Exemplo"], "estrelas": ["Ator Exemplo 1", "Atriz Exemplo 1"], "generos": ["Action", "Adventure"], "pais_origem": ["USA"], "idioma": ["English"], "vitorias": 5, "indicacoes": 10, "oscars_indicados": 1 },
+                { "id": "ex002", "titulo": "Filme de Exemplo B (Comédia)", "link": "#", "ano_lancamento": 2019, "duracao_minutos": 95, "classificacao_etaria": "G", "avaliacao_critica": 6.8, "votos": 80000, "orcamento": 20000000, "bilheteria_mundial": 70000000, "diretores": ["Outro Diretor"], "roteiristas": ["Outro Roteirista"], "estrelas": ["Comediante Famoso", "Atriz Coadjuvante"], "generos": ["Comedy", "Family"], "pais_origem": ["Canada"], "idioma": ["English", "French"], "vitorias": 2, "indicacoes": 3, "oscars_indicados": 0 }
             ];
 
-            if (!url || url === "URL_DO_SEU_CSV_AQUI") {
-                csvStatus.textContent = "URL do CSV não definida no código. A usar dados de exemplo.";
-                csvStatus.className = "mt-2 text-sm text-yellow-600";
-                BASE_DE_CASOS = exampleData;
+            if (!url || url === "URL_DO_SEU_CSV_AQUI" || url === "") { // Verifica se a URL é válida/definida
+                csvStatus.textContent = "URL do CSV não definida ou inválida. A usar dados de exemplo.";
+                csvStatus.className = "mt-2 text-sm status-warning";
+                BASE_DE_CASOS = exampleData.map(filme => { // Garante que arrays de exemplo sejam arrays
+                    ['diretores', 'roteiristas', 'estrelas', 'generos', 'pais_origem', 'idioma'].forEach(key => {
+                        if (!filme[key]) filme[key] = [];
+                    });
+                    return filme;
+                });
                 isExampleData = true;
+                updateDataBasedInputs();
                 searchButton.disabled = false;
                 return;
             }
 
             csvStatus.textContent = `A carregar CSV de: ${url}...`;
-            csvStatus.className = "mt-2 text-sm text-blue-600";
-            searchButton.disabled = true;
+            csvStatus.className = "mt-2 text-sm status-loading";
+            searchButton.disabled = true; // Desabilita busca durante carregamento
 
             try {
                 const response = await fetch(url);
                 if (!response.ok) throw new Error(`Erro HTTP: ${response.status} ${response.statusText}`);
                 const csvText = await response.text();
-                const parsedData = parseCSV(csvText);
+                const parsedData = parseCSV(csvText); // Chama a função de parse
 
                 if (parsedData.length > 0) {
                     BASE_DE_CASOS = parsedData;
                     isExampleData = false;
                     csvStatus.textContent = `${parsedData.length} filmes carregados com sucesso do CSV!`;
-                    csvStatus.className = "mt-2 text-sm text-green-600";
+                    csvStatus.className = "mt-2 text-sm status-success";
                 } else {
                     csvStatus.textContent = "Nenhum filme válido encontrado no CSV. A usar dados de exemplo.";
-                    csvStatus.className = "mt-2 text-sm text-yellow-600";
-                    BASE_DE_CASOS = exampleData;
+                    csvStatus.className = "mt-2 text-sm status-warning";
+                    BASE_DE_CASOS = exampleData.map(filme => { // Garante que arrays de exemplo sejam arrays
+                        ['diretores', 'roteiristas', 'estrelas', 'generos', 'pais_origem', 'idioma'].forEach(key => {
+                            if (!filme[key]) filme[key] = [];
+                        });
+                        return filme;
+                    });
                     isExampleData = true;
                 }
             } catch (error) {
                 console.error("Erro ao carregar ou parsear CSV:", error);
                 csvStatus.textContent = `Erro ao carregar CSV: ${error.message}. Verifique URL, formato e CORS. A usar dados de exemplo.`;
-                csvStatus.className = "mt-2 text-sm text-red-600";
-                BASE_DE_CASOS = exampleData;
+                csvStatus.className = "mt-2 text-sm status-error";
+                BASE_DE_CASOS = exampleData.map(filme => { // Garante que arrays de exemplo sejam arrays
+                    ['diretores', 'roteiristas', 'estrelas', 'generos', 'pais_origem', 'idioma'].forEach(key => {
+                        if (!filme[key]) filme[key] = [];
+                    });
+                    return filme;
+                });
                 isExampleData = true;
             } finally {
-                searchButton.disabled = false;
+                updateDataBasedInputs(); // Atualiza inputs com base nos dados carregados (reais ou de exemplo)
+                searchButton.disabled = false; // Habilita o botão de busca após tentativa de carregamento
             }
         }
 
-        // --- 4. Métricas de Similaridade ---
+        // --- 4. Métricas de Similaridade Local ---
+        // REQUISITO RBC: Definição de como os atributos são comparados (MÉTRICA DE SIMILARIDADE LOCAL).
+        // Cada função calcula a similaridade para um tipo específico de atributo.
+        // O resultado é um valor entre 0 (totalmente diferente) e 1 (idêntico).
+
+        /**
+         * MÉTRICA DE SIMILARIDADE LOCAL: Similaridade de Jaccard.
+         * Usada para ATRIBUTOS que são conjuntos/listas (ex: 'generos', 'estrelas').
+         * Justificativa: Comum e eficaz para comparar a sobreposição entre dois conjuntos de itens.
+         * Fórmula: (tamanho da interseção) / (tamanho da união)
+         */
         function similaridadeJaccard(list1, list2) {
-            const set1 = new Set(Array.isArray(list1) ? list1.filter(Boolean) : []);
+            const set1 = new Set(Array.isArray(list1) ? list1.filter(Boolean) : []); // Garante que é um array e remove falsy values
             const set2 = new Set(Array.isArray(list2) ? list2.filter(Boolean) : []);
-            if (set1.size === 0 && set2.size === 0) return 1.0;
-            if (set1.size === 0 || set2.size === 0) return 0.0;
+            if (set1.size === 0 && set2.size === 0) return 1.0; // Ambas vazias são consideradas idênticas
+            if (set1.size === 0 || set2.size === 0) return 0.0; // Uma vazia e outra não, são diferentes
             const intersection = new Set([...set1].filter(x => set2.has(x)));
             const union = new Set([...set1, ...set2]);
             return union.size === 0 ? 0.0 : intersection.size / union.size;
         }
 
-        function similaridadeNumericaNormalizada(val1, val2, minVal, maxVal) {
-            if (val1 === null || val2 === null || typeof val1 !== 'number' || typeof val2 !== 'number') return 0.0;
-            if (minVal === null || maxVal === null) return (val1 === val2) ? 1.0 : 0.0;
-            const maxDiff = maxVal - minVal;
-            if (maxDiff <= 0) return (val1 === val2) ? 1.0 : 0.0; // Evita divisão por zero ou negativo
+        /**
+         * MÉTRICA DE SIMILARIDADE LOCAL: Similaridade Numérica Normalizada.
+         * Usada para ATRIBUTOS numéricos (ex: 'ano_lancamento', 'avaliacao_critica').
+         * Justificativa: Calcula a similaridade baseada na proximidade dos valores, normalizada pelo range (min/max) do atributo na base de casos.
+         * Isso garante que atributos com diferentes escalas contribuam de forma justa.
+         * Fórmula: 1 - (|val1 - val2| / (max - min))
+         */
+        function similaridadeNumericaNormalizada(val1, val2, rangeKey) {
+            if (val1 === null || val2 === null || typeof val1 !== 'number' || typeof val2 !== 'number') return 0.0; // Se um dos valores não for número válido
+
+            const range = RANGES[rangeKey]; // Obtém o min/max calculado para este atributo
+            if (!range || range.min === Infinity || range.max === -Infinity) return (val1 === val2) ? 1.0 : 0.0; // Range inválido
+
+            const maxDiff = range.max - range.min;
+            if (maxDiff <= 0) return (val1 === val2) ? 1.0 : 0.0; // Evita divisão por zero ou range unitário
+
             const diff = Math.abs(val1 - val2);
-            const sim = 1.0 - (diff / maxDiff);
-            return Math.max(0.0, sim);
+            // Garante que a diferença não exceda o maxDiff (para valores fora do range conhecido)
+            const clampedDiff = Math.max(0, Math.min(diff, maxDiff));
+            const sim = 1.0 - (clampedDiff / maxDiff);
+            return sim;
         }
 
+
+        /**
+         * MÉTRICA DE SIMILARIDADE LOCAL: Similaridade Ordinal para Classificação Etária (MPAA).
+         * Usada para o ATRIBUTO 'classificacao_etaria'.
+         * Justificativa: Trata as classificações como valores ordenados, onde a "distância" entre classificações adjacentes é menor
+         * do que entre classificações distantes na escala.
+         * Utiliza o `CLASSIFICACAO_MPAA_MAPA_ORDINAL` e `MAX_DIFF_CLASSIFICACAO_MPAA`.
+         */
         function similaridadeOrdinalMpaa(val1Str, val2Str) {
-            const sVal1 = (val1Str || "Unrated").trim();
-            const sVal2 = (val2Str || "Unrated").trim();
-            const normalize = (s) => {
-                const upper = s.toUpperCase();
-                const norm = upper.replace(/\s+/g, "-");
-                return CLASSIFICACAO_MPAA_MAPA_ORDINAL.hasOwnProperty(norm) ? norm :
-                    CLASSIFICACAO_MPAA_MAPA_ORDINAL.hasOwnProperty(upper) ? upper :
-                        CLASSIFICACAO_MPAA_MAPA_ORDINAL.hasOwnProperty(s) ? s : s;
+            const sVal1 = normalizeRatingJS(val1Str || "Unrated"); // Normaliza a string de entrada
+            const sVal2 = normalizeRatingJS(val2Str || "Unrated"); // Normaliza a string do caso base
+
+            const val1Num = CLASSIFICACAO_MPAA_MAPA_ORDINAL[sVal1]; // Converte para valor numérico ordinal
+            const val2Num = CLASSIFICACAO_MPAA_MAPA_ORDINAL[sVal2];
+
+            // Se um ou ambos não estão no MAPA ordinal (pode ser valor não padrão), compara strings diretamente
+            if (val1Num === undefined || val2Num === undefined) {
+                return (sVal1 === sVal2) ? 1.0 : 0.0;
             }
-            const val1Norm = normalize(sVal1);
-            const val2Norm = normalize(sVal2);
-            const val1Num = CLASSIFICACAO_MPAA_MAPA_ORDINAL[val1Norm];
-            const val2Num = CLASSIFICACAO_MPAA_MAPA_ORDINAL[val2Norm];
-            if (val1Num === undefined || val2Num === undefined) return (sVal1 === sVal2) ? 1.0 : 0.0;
-            if (MAX_DIFF_CLASSIFICACAO_MPAA <= 0) return (val1Num === val2Num) ? 1.0 : 0.0;
+
+            if (MAX_DIFF_CLASSIFICACAO_MPAA <= 0) return (val1Num === val2Num) ? 1.0 : 0.0; // Evita divisão por zero
             return 1.0 - (Math.abs(val1Num - val2Num) / MAX_DIFF_CLASSIFICACAO_MPAA);
         }
 
         // --- 5. Função de Similaridade Global ---
+        // REQUISITO RBC: Combina as similaridades locais ponderadas pelos PESOS DOS ATRIBUTOS.
+
+        /**
+         * Calcula a SIMILARIDADE GLOBAL entre um casoNovo (entrada do usuário) e um casoBase (da base de filmes).
+         * É uma soma ponderada das similaridades locais dos atributos.
+         * Os PESOS são definidos pelo usuário (ou usam o default da modelagem).
+         */
         function calcularSimilaridadeGlobal(casoNovo, casoBase, pesos) {
             if (!casoNovo || !casoBase) return 0.0;
             let similaridadesPonderadas = 0;
-            let pesosEfetivamenteUsados = 0;
-            const calcularEAdicionar = (chave, funcSimilaridade, ...args) => {
-                const peso = pesos[chave] || 0;
-                // Calcula apenas se o peso for positivo E o caso novo tiver o atributo definido
-                if (peso > 0 && casoNovo.hasOwnProperty(chave) && casoNovo[chave] !== null && casoNovo[chave] !== undefined) {
-                    let valorBase = casoBase[chave];
-                    let valorNovo = casoNovo[chave];
+            let pesosEfetivamenteUsados = 0; // Soma dos pesos dos atributos que foram realmente comparados
+
+            // Função auxiliar para calcular e adicionar a similaridade de um atributo
+            const calcularEAdicionar = (chaveAtributo, funcSimilaridadeLocal, ...argsFuncLocal) => {
+                const peso = pesos[chaveAtributo] || 0; // Peso do atributo atual
+
+                // Só calcula se o peso for positivo E o casoNovo tiver esse atributo definido
+                if (peso > 0 && casoNovo.hasOwnProperty(chaveAtributo) &&
+                    casoNovo[chaveAtributo] !== null && casoNovo[chaveAtributo] !== undefined) {
+
+                    let valorBase = casoBase[chaveAtributo];
+                    let valorNovo = casoNovo[chaveAtributo];
                     let podeCalcular = true;
-                    // Para similaridade numérica ou ordinal, o caso base também precisa ter um valor válido
-                    if (funcSimilaridade === similaridadeNumericaNormalizada || funcSimilaridade === similaridadeOrdinalMpaa) {
-                        if (valorBase === null || valorBase === undefined) {
-                            podeCalcular = false;
-                        }
-                    } else if (funcSimilaridade === similaridadeJaccard) {
-                        // Jaccard lida com arrays vazios, então sempre pode calcular se o novo caso tiver o atributo
-                        valorNovo = Array.isArray(valorNovo) ? valorNovo : [];
-                        valorBase = Array.isArray(valorBase) ? valorBase : [];
+
+                    // Tratamento para tipos de atributos e valores nulos na base
+                    if (funcSimilaridadeLocal === similaridadeNumericaNormalizada || funcSimilaridadeLocal === similaridadeOrdinalMpaa) {
+                        if (valorBase === null || valorBase === undefined) { podeCalcular = false; } // Não compara se o caso base não tiver o valor
+                    } else if (funcSimilaridadeLocal === similaridadeJaccard) {
+                        // Garante que sejam arrays para Jaccard, mesmo que vazios
+                        valorNovo = Array.isArray(valorNovo) ? valorNovo : (valorNovo ? [String(valorNovo)] : []);
+                        valorBase = Array.isArray(valorBase) ? valorBase : (valorBase ? [String(valorBase)] : []);
                     }
+
                     if (podeCalcular) {
-                        const similaridadeLocal = funcSimilaridade(valorNovo, valorBase, ...args);
+                        // Para similaridade numérica, o 'rangeKey' é o próprio nome do atributo (argsFuncLocal[0])
+                        const finalArgs = funcSimilaridadeLocal === similaridadeNumericaNormalizada ? [chaveAtributo] : argsFuncLocal;
+                        const similaridadeLocal = funcSimilaridadeLocal(valorNovo, valorBase, ...finalArgs);
+
                         similaridadesPonderadas += similaridadeLocal * peso;
                         pesosEfetivamenteUsados += peso;
                     }
                 }
             };
+
+            // Aplica para cada atributo definido nos PESOS_PADRAO
+            // O terceiro argumento para similaridadeNumericaNormalizada é a 'rangeKey', que é o nome do atributo
             calcularEAdicionar('generos', similaridadeJaccard);
-            calcularEAdicionar('ano_lancamento', similaridadeNumericaNormalizada, MIN_ANO, MAX_ANO);
+            calcularEAdicionar('ano_lancamento', similaridadeNumericaNormalizada, 'ano_lancamento');
             calcularEAdicionar('classificacao_etaria', similaridadeOrdinalMpaa);
-            calcularEAdicionar('duracao_minutos', similaridadeNumericaNormalizada, MIN_DURACAO, MAX_DURACAO);
-            calcularEAdicionar('avaliacao_critica', similaridadeNumericaNormalizada, MIN_AVALIACAO_IMDB, MAX_AVALIACAO_IMDB);
-            calcularEAdicionar('votos', similaridadeNumericaNormalizada, MIN_VOTOS, MAX_VOTOS);
-            calcularEAdicionar('orcamento', similaridadeNumericaNormalizada, MIN_ORCAMENTO, MAX_ORCAMENTO);
-            calcularEAdicionar('bilheteria_mundial', similaridadeNumericaNormalizada, MIN_BILHETERIA_MUNDIAL, MAX_BILHETERIA_MUNDIAL);
+            calcularEAdicionar('duracao_minutos', similaridadeNumericaNormalizada, 'duracao_minutos');
+            calcularEAdicionar('avaliacao_critica', similaridadeNumericaNormalizada, 'avaliacao_critica');
+            calcularEAdicionar('votos', similaridadeNumericaNormalizada, 'votos');
+            calcularEAdicionar('orcamento', similaridadeNumericaNormalizada, 'orcamento'); // Mesmo que não esteja no form, pode estar nos pesos
+            calcularEAdicionar('bilheteria_mundial', similaridadeNumericaNormalizada, 'bilheteria_mundial');
             calcularEAdicionar('diretores', similaridadeJaccard);
             calcularEAdicionar('roteiristas', similaridadeJaccard);
             calcularEAdicionar('estrelas', similaridadeJaccard);
             calcularEAdicionar('pais_origem', similaridadeJaccard);
             calcularEAdicionar('idioma', similaridadeJaccard);
-            calcularEAdicionar('vitorias', similaridadeNumericaNormalizada, MIN_VITORIAS, MAX_VITORIAS);
-            calcularEAdicionar('indicacoes', similaridadeNumericaNormalizada, MIN_INDICACOES, MAX_INDICACOES);
-            calcularEAdicionar('oscars_indicados', similaridadeNumericaNormalizada, MIN_OSCARS_INDICADOS, MAX_OSCARS_INDICADOS);
+            calcularEAdicionar('vitorias', similaridadeNumericaNormalizada, 'vitorias');
+            calcularEAdicionar('indicacoes', similaridadeNumericaNormalizada, 'indicacoes');
+            calcularEAdicionar('oscars_indicados', similaridadeNumericaNormalizada, 'oscars_indicados');
+
+            // Normaliza a similaridade global pela soma dos pesos efetivamente usados
+            // Evita que um caso seja penalizado se o usuário não preencheu muitos campos (e.g. se pesosUsados for baixo)
             return pesosEfetivamenteUsados === 0 ? 0.0 : similaridadesPonderadas / pesosEfetivamenteUsados;
         }
 
         // --- 6. Lógica da Interface e Eventos ---
+        // REQUISITO RBC: Interface para o usuário interagir com o sistema.
+
+        /**
+         * Popula a seção de ajuste de PESOS na interface.
+         * REQUISITO RBC: A entrada de dados deve permitir ao usuário alterar os pesos
+         * (trazer os pesos propostos na modelagem como default).
+         */
         function popularPesos() {
-            weightsForm.innerHTML = '';
+            weightsForm.innerHTML = ''; // Limpa pesos anteriores
             for (const atributo in PESOS_PADRAO) {
-                const pesoAtual = PESOS_PADRAO[atributo];
+                const pesoAtual = PESOS_PADRAO[atributo]; // Peso default da modelagem
                 const div = document.createElement('div');
                 div.className = 'flex items-center space-x-2';
+
                 const label = document.createElement('label');
                 label.htmlFor = `peso-${atributo}`;
+                // Formata o nome do atributo para exibição (ex: 'ano_lancamento' -> 'Ano Lancamento')
                 label.textContent = atributo.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                label.className = 'text-sm font-medium text-gray-700 weight-label';
+                label.className = 'text-sm font-medium weight-label';
+
                 const slider = document.createElement('input');
                 slider.type = 'range'; slider.id = `peso-${atributo}`; slider.name = `peso-${atributo}`;
                 slider.min = '0'; slider.max = '1'; slider.step = '0.01'; slider.value = pesoAtual;
                 slider.className = 'flex-grow';
+
                 const valueSpan = document.createElement('span');
-                valueSpan.id = `valor-peso-${atributo}`; valueSpan.textContent = parseFloat(pesoAtual).toFixed(2);
-                valueSpan.className = 'text-sm text-gray-600 weight-value';
-                slider.addEventListener('input', (e) => { valueSpan.textContent = parseFloat(e.target.value).toFixed(2); });
+                valueSpan.id = `valor-peso-${atributo}`;
+                valueSpan.textContent = `${parseFloat(pesoAtual).toFixed(2)} / ${parseFloat(slider.max).toFixed(2)}`;
+                valueSpan.className = 'text-sm weight-value';
+
+                // Atualiza o valor exibido quando o slider é movido
+                slider.addEventListener('input', (e) => { valueSpan.textContent = `${parseFloat(e.target.value).toFixed(2)} / ${parseFloat(e.target.max).toFixed(2)}`; });
+
                 div.appendChild(label); div.appendChild(slider); div.appendChild(valueSpan);
                 weightsForm.appendChild(div);
             }
         }
 
-        function popularDatalistMPAA() {
-            mpaaDatalist.innerHTML = '';
-            CLASSIFICACOES_MPAA_POSSIVEIS.forEach(rating => {
-                const option = document.createElement('option'); option.value = rating;
-                mpaaDatalist.appendChild(option);
-            });
-        }
 
+        /**
+         * Obtém os dados de entrada do usuário do formulário (CASO NOVO) e os PESOS ATUAIS.
+         * REQUISITO RBC: Interface para o usuário inserir o caso de entrada (atributos do problema)
+         * e alterar os pesos dos atributos.
+         */
         function obterEntradaUsuario() {
-            const formData = new FormData(form);
-            const novoCaso = {};
-            const pesosAtuais = {};
+            const formData = new FormData(form); // Pega dados do formulário 'cbr-form'
+            const novoCaso = {}; // Objeto para o caso de entrada
+            const pesosAtuais = {}; // Objeto para os pesos atuais
 
-            // Coleta dados do filme desejado
-            const generos = formData.get('generos');
-            if (generos) novoCaso.generos = parseCommaSeparatedString(generos);
-            const ano = formData.get('ano_lancamento');
-            if (ano) novoCaso.ano_lancamento = toInt(ano);
-            const classificacao = formData.get('classificacao_etaria');
-            if (classificacao) novoCaso.classificacao_etaria = classificacao.trim() || null;
-            const duracao = formData.get('duracao_minutos');
-            if (duracao) novoCaso.duracao_minutos = toInt(duracao);
-            const avaliacao = formData.get('avaliacao_critica');
-            if (avaliacao) novoCaso.avaliacao_critica = toFloat(avaliacao);
-            const votos = formData.get('votos');
-            if (votos) novoCaso.votos = toInt(votos);
-            const estrelas = formData.get('estrelas');
-            if (estrelas) novoCaso.estrelas = parseCommaSeparatedString(estrelas);
-            const diretores = formData.get('diretores');
-            if (diretores) novoCaso.diretores = parseCommaSeparatedString(diretores);
-            const roteiristas = formData.get('roteiristas'); // Coleta roteiristas
-            if (roteiristas) novoCaso.roteiristas = parseCommaSeparatedString(roteiristas);
+            // Coleta e processa cada atributo do formulário
+            const generos = formData.get('generos'); if (generos) novoCaso.generos = parseCommaSeparatedString(generos);
+            const ano = formData.get('ano_lancamento'); if (ano) novoCaso.ano_lancamento = toInt(ano);
+            const classificacao = formData.get('classificacao_etaria'); if (classificacao) novoCaso.classificacao_etaria = classificacao.trim() || null; // Normaliza ou null
+            const duracao = formData.get('duracao_minutos'); if (duracao) novoCaso.duracao_minutos = toInt(duracao);
+            const avaliacao = formData.get('avaliacao_critica'); if (avaliacao) novoCaso.avaliacao_critica = toFloat(avaliacao);
+            const votos = formData.get('votos'); if (votos) novoCaso.votos = toInt(votos);
+            const estrelas = formData.get('estrelas'); if (estrelas) novoCaso.estrelas = parseCommaSeparatedString(estrelas);
+            const diretores = formData.get('diretores'); if (diretores) novoCaso.diretores = parseCommaSeparatedString(diretores);
+            const roteiristas = formData.get('roteiristas'); if (roteiristas) novoCaso.roteiristas = parseCommaSeparatedString(roteiristas);
 
-            // Remove chaves com valores nulos ou arrays vazios do novoCaso
+            // Remove chaves do novoCaso se o valor for nulo ou array vazio, para não interferir na similaridade global
             for (const key in novoCaso) {
                 if (novoCaso[key] === null || (Array.isArray(novoCaso[key]) && novoCaso[key].length === 0)) {
                     delete novoCaso[key];
                 }
             }
 
-            // Coleta pesos ajustados
+            // Coleta os pesos dos sliders
             const weightInputs = weightsForm.querySelectorAll('input[type="range"]');
             weightInputs.forEach(input => {
                 const atributo = input.name.replace('peso-', '');
@@ -699,12 +986,18 @@
             return { novoCaso, pesosAtuais };
         }
 
+        /**
+         * Exibe os resultados da busca na interface.
+         * REQUISITO RBC: A SAÍDA deve mostrar o CASO DE ENTRADA, os PESOS UTILIZADOS,
+         * e todos os CASOS DA BASE em ORDEM DE SIMILARIDADE (do mais similar ao menos similar).
+         * Cada caso deve apresentar TODOS OS ATRIBUTOS RELEVANTES e o % DE SIMILARIDADE.
+         */
         function exibirResultados(casoEntrada, casosOrdenados, pesosUsados, topN) {
-            resultsSection.classList.remove('hidden');
+            resultsSection.classList.remove('hidden'); // Torna a seção de resultados visível
             resultsOutput.innerHTML = ''; searchCriteriaDiv.innerHTML = ''; weightsUsedDiv.innerHTML = '';
-            noResultsDiv.classList.add('hidden');
+            noResultsDiv.classList.add('hidden'); // Esconde mensagem de "sem resultados"
 
-            // Exibe Critérios da Busca
+            // Mostra o CASO DE ENTRADA (Critérios da Busca)
             const criteriaList = document.createElement('ul'); criteriaList.className = 'list-disc list-inside space-y-1';
             let criteriaFound = false;
             for (const chave in casoEntrada) {
@@ -716,11 +1009,11 @@
             if (!criteriaFound) searchCriteriaDiv.textContent = "Nenhum critério específico fornecido.";
             else searchCriteriaDiv.appendChild(criteriaList);
 
-            // Exibe Pesos Utilizados
+            // Mostra os PESOS UTILIZADOS na busca
             const weightsList = document.createElement('ul'); weightsList.className = 'list-disc list-inside space-y-1';
             let weightsFound = false;
             for (const chave in pesosUsados) {
-                if (pesosUsados[chave] > 0) {
+                if (pesosUsados[chave] > 0) { // Mostra apenas pesos que contribuíram
                     weightsFound = true; const li = document.createElement('li');
                     li.innerHTML = `<span class="font-medium">${chave.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}:</span> ${pesosUsados[chave].toFixed(2)}`;
                     weightsList.appendChild(li);
@@ -729,106 +1022,112 @@
             if (!weightsFound) weightsUsedDiv.textContent = "Nenhum peso maior que zero utilizado.";
             else weightsUsedDiv.appendChild(weightsList);
 
-            // Filtra e exibe os Top N Filmes
-            const casosParaExibir = casosOrdenados.filter(c => c.similaridade > 0).slice(0, topN);
+            // Filtra e limita o número de casos a serem exibidos
+            const casosParaExibir = casosOrdenados.filter(c => c.similaridade > 0).slice(0, topN); // Pega os topN com similaridade > 0
             if (casosParaExibir.length === 0) {
-                noResultsDiv.classList.remove('hidden'); return;
+                noResultsDiv.classList.remove('hidden'); // Mostra mensagem se nenhum resultado
+                return;
             }
 
+            // Cria um card para cada CASO RECOMENDADO
             casosParaExibir.forEach(item => {
-                const filme = item.caso; const similaridade = item.similaridade;
+                const filme = item.caso; // O objeto do filme (caso da base)
+                const similaridade = item.similaridade; // A similaridade global calculada
+
                 const div = document.createElement('div');
-                // Adiciona classes para o card dentro do grid
-                div.className = 'p-4 border border-gray-200 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-150 flex flex-col'; // flex-col para organização interna
+                div.className = 'result-card p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-150 flex flex-col';
 
-                let content = `<h3 class="text-lg font-semibold text-blue-700 mb-1">${filme.titulo || 'N/A'} (${filme.ano_lancamento || 'N/A'})</h3>`;
-                content += `<p class="text-sm font-medium text-green-600 mb-3">Similaridade: ${(similaridade * 100).toFixed(2)}%</p>`;
+                // Monta o conteúdo do card com os ATRIBUTOS do filme e o % DE SIMILARIDADE
+                let content = `<h3 class="text-lg font-semibold mb-1">${filme.titulo || 'N/A'} (${filme.ano_lancamento || 'N/A'})</h3>`;
+                content += `<p class="text-sm font-medium text-yellow-300 mb-3">Similaridade: ${(similaridade * 100).toFixed(2)}%</p>`; // % de similaridade
 
-                // Container para detalhes com scroll se necessário
-                content += '<div class="text-xs text-gray-600 space-y-1 overflow-y-auto flex-grow mb-2">'; // flex-grow faz esta div ocupar espaço
-
-                // Detalhes principais
+                content += '<div class="text-xs space-y-1 overflow-y-auto flex-grow mb-2">'; // Detalhes do filme
                 if (filme.generos && filme.generos.length > 0) content += `<p><span class="font-medium">Gêneros:</span> ${filme.generos.join(', ')}</p>`;
                 if (filme.duracao_minutos) content += `<p><span class="font-medium">Duração:</span> ${filme.duracao_minutos} min</p>`;
                 if (filme.classificacao_etaria) content += `<p><span class="font-medium">Classificação:</span> ${filme.classificacao_etaria}</p>`;
                 if (filme.avaliacao_critica) content += `<p><span class="font-medium">Avaliação IMDb:</span> ${filme.avaliacao_critica}/10 (${(filme.votos || 0).toLocaleString('pt-BR')} votos)</p>`;
-
-                // Elenco e Equipe
                 if (filme.diretores && filme.diretores.length > 0) content += `<p><span class="font-medium">Diretor(es):</span> ${filme.diretores.join(', ')}</p>`;
                 if (filme.roteiristas && filme.roteiristas.length > 0) content += `<p><span class="font-medium">Roteirista(s):</span> ${filme.roteiristas.join(', ')}</p>`;
                 if (filme.estrelas && filme.estrelas.length > 0) content += `<p><span class="font-medium">Estrelas:</span> ${filme.estrelas.join(', ')}</p>`;
-
-                // Detalhes de Produção
                 if (filme.pais_origem && filme.pais_origem.length > 0) content += `<p><span class="font-medium">País:</span> ${filme.pais_origem.join(', ')}</p>`;
                 if (filme.idioma && filme.idioma.length > 0) content += `<p><span class="font-medium">Idioma(s):</span> ${filme.idioma.join(', ')}</p>`;
                 if (filme.orcamento) content += `<p><span class="font-medium">Orçamento:</span> ${formatCurrency(filme.orcamento)}</p>`;
                 if (filme.bilheteria_mundial) content += `<p><span class="font-medium">Bilheteria Mundial:</span> ${formatCurrency(filme.bilheteria_mundial)}</p>`;
-
-                // Prêmios
                 let premiosStr = '';
                 if (filme.vitorias) premiosStr += `${filme.vitorias} Vit.`;
                 if (filme.indicacoes) premiosStr += `${premiosStr ? ' / ' : ''}${filme.indicacoes} Indic.`;
                 if (filme.oscars_indicados) premiosStr += `${premiosStr ? ' / ' : ''}${filme.oscars_indicados} Indic. Oscar`;
                 if (premiosStr) content += `<p><span class="font-medium">Prêmios:</span> ${premiosStr}</p>`;
+                content += '</div>';
 
-                content += '</div>'; // Fim do container de detalhes
-
-                // Link IMDb (se houver) - colocado no final
-                if (filme.link) {
-                    content += `<div class="mt-auto pt-2 border-t border-gray-100 text-center">`; // mt-auto empurra para baixo
-                    content += `<a href="${filme.link}" target="_blank" class="text-xs text-blue-500 hover:underline">Ver no IMDb</a>`;
+                if (filme.link && filme.link !== '#') { // Adiciona link para IMDb se disponível
+                    content += `<div class="mt-auto pt-2 border-t border-purple-800 text-center">`;
+                    content += `<a href="${filme.link}" target="_blank" class="text-xs hover:underline">Ver no IMDb</a>`;
                     content += `</div>`;
                 }
-
                 div.innerHTML = content;
                 resultsOutput.appendChild(div);
             });
         }
 
+        /**
+         * Manipula o evento de clique no botão de busca.
+         * Orquestra o processo de RECUPERAÇÃO DE CASOS do RBC.
+         */
         async function handleSearch(event) {
-            event.preventDefault();
-            loadingIndicator.classList.remove('hidden');
+            event.preventDefault(); // Impede o envio padrão do formulário
+            loadingIndicator.classList.remove('hidden'); // Mostra indicador de carregamento
             resultsOutput.innerHTML = ''; resultsSection.classList.add('hidden'); noResultsDiv.classList.add('hidden');
-            await new Promise(resolve => setTimeout(resolve, 50));
+            await new Promise(resolve => setTimeout(resolve, 50)); // Pequeno delay para UI atualizar
 
-            const { novoCaso, pesosAtuais } = obterEntradaUsuario();
-            const topN = parseInt(numResultsSlider.value, 10); // Pega o valor do slider
+            const { novoCaso, pesosAtuais } = obterEntradaUsuario(); // Pega entrada e pesos
+            const topN = parseInt(numResultsSlider.value, 10); // Número de resultados a exibir
 
+            // Validação: verifica se o usuário forneceu algum critério de busca
             if (Object.keys(novoCaso).length === 0) {
                 const messageBox = document.createElement('div');
+                // Estilos para a caixa de mensagem (pode ser melhorado com classes CSS)
                 messageBox.style.position = 'fixed'; messageBox.style.top = '20px'; messageBox.style.left = '50%';
                 messageBox.style.transform = 'translateX(-50%)'; messageBox.style.padding = '10px 20px';
-                messageBox.style.backgroundColor = '#f8d7da'; messageBox.style.color = '#721c24';
-                messageBox.style.border = '1px solid #f5c6cb'; messageBox.style.borderRadius = '0.25rem';
+                messageBox.style.backgroundColor = '#DAA520'; messageBox.style.color = '#2C1F3D';
+                messageBox.style.border = '1px solid #FFD700'; messageBox.style.borderRadius = '0.25rem';
                 messageBox.style.zIndex = '1000';
                 messageBox.textContent = "Por favor, forneça pelo menos um critério para a busca.";
                 document.body.appendChild(messageBox);
-                setTimeout(() => { messageBox.remove(); }, 3000);
-                loadingIndicator.classList.add('hidden');
-                return;
+                setTimeout(() => { messageBox.remove(); }, 3000); // Remove a mensagem após 3 segundos
+
+                loadingIndicator.classList.add('hidden'); // Esconde carregamento
+                return; // Interrompe a busca
             }
 
+            // --- Ciclo de RECUPERAÇÃO do RBC ---
             const resultadosSimilaridade = [];
-            for (const casoBase of BASE_DE_CASOS) {
+            for (const casoBase of BASE_DE_CASOS) { // Itera sobre cada caso na base
+                // Calcula a similaridade global entre o novoCaso e o casoBase atual
                 const sim = calcularSimilaridadeGlobal(novoCaso, casoBase, pesosAtuais);
                 resultadosSimilaridade.push({ caso: casoBase, similaridade: sim });
             }
+            // Ordena os resultados pela similaridade em ordem decrescente
             const casosOrdenados = resultadosSimilaridade.sort((a, b) => b.similaridade - a.similaridade);
-            loadingIndicator.classList.add('hidden');
-            exibirResultados(novoCaso, casosOrdenados, pesosAtuais, topN); // Passa topN
+
+            loadingIndicator.classList.add('hidden'); // Esconde indicador de carregamento
+            exibirResultados(novoCaso, casosOrdenados, pesosAtuais, topN); // Exibe os resultados
         }
 
         // --- Inicialização ---
+        // REQUISITO RBC: O programa é implementado em linguagem de programação (JavaScript aqui).
+        // Configura a interface e carrega os dados iniciais quando o DOM estiver pronto.
         document.addEventListener('DOMContentLoaded', async () => {
-            popularPesos();
-            popularDatalistMPAA();
-            // Atualiza o valor exibido do slider de resultados
-            numResultsValueSpan.textContent = numResultsSlider.value;
-            numResultsSlider.addEventListener('input', (e) => {
-                numResultsValueSpan.textContent = e.target.value;
-            });
-            searchButton.addEventListener('click', handleSearch);
-            await loadCSVFromURL(CSV_FILE_URL); // Carrega o CSV automaticamente
+            popularPesos(); // Cria os sliders de peso na interface
+
+            // Configura o slider para número de resultados
+            numResultsValueSpan.textContent = `${numResultsSlider.value} / ${numResultsSlider.max}`;
+            numResultsSlider.addEventListener('input', (e) => { numResultsValueSpan.textContent = `${e.target.value} / ${e.target.max}`; });
+
+            searchButton.addEventListener('click', handleSearch); // Adiciona listener ao botão de busca
+
+            // Carrega a BASE_DE_CASOS do CSV. Este é um passo crucial para o RBC funcionar.
+            await loadCSVFromURL(CSV_FILE_URL);
         });
     </script>
 </body>
