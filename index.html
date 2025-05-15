@@ -712,19 +712,40 @@
                 { "id": "ex001", "titulo": "Filme de Exemplo A (Ação)", "link": "#", "ano_lancamento": 2020, "duracao_minutos": 120, "classificacao_etaria": "PG-13", "avaliacao_critica": 7.5, "votos": 150000, "orcamento": 50000000, "bilheteria_mundial": 150000000, "diretores": ["Diretor Exemplo"], "roteiristas": ["Roteirista Exemplo"], "estrelas": ["Ator Exemplo 1", "Atriz Exemplo 1"], "generos": ["Action", "Adventure"], "pais_origem": ["USA"], "idioma": ["English"], "vitorias": 5, "indicacoes": 10, "oscars_indicados": 1 },
                 { "id": "ex002", "titulo": "Filme de Exemplo B (Comédia)", "link": "#", "ano_lancamento": 2019, "duracao_minutos": 95, "classificacao_etaria": "G", "avaliacao_critica": 6.8, "votos": 80000, "orcamento": 20000000, "bilheteria_mundial": 70000000, "diretores": ["Outro Diretor"], "roteiristas": ["Outro Roteirista"], "estrelas": ["Comediante Famoso", "Atriz Coadjuvante"], "generos": ["Comedy", "Family"], "pais_origem": ["Canada"], "idioma": ["English", "French"], "vitorias": 2, "indicacoes": 3, "oscars_indicados": 0 }
             ];
+            const localCsvFile = "filmes_base_novo.csv";
 
             if (!url || url === "URL_DO_SEU_CSV_AQUI" || url === "") { // Verifica se a URL é válida/definida
-                csvStatus.textContent = "URL do CSV não definida ou inválida. A usar dados de exemplo.";
-                csvStatus.className = "mt-2 text-sm status-warning";
-                BASE_DE_CASOS = exampleData.map(filme => { // Garante que arrays de exemplo sejam arrays
-                    ['diretores', 'roteiristas', 'estrelas', 'generos', 'pais_origem', 'idioma'].forEach(key => {
-                        if (!filme[key]) filme[key] = [];
+                csvStatus.textContent = `URL do CSV não definida. A tentar carregar ${localCsvFile} localmente...`;
+                csvStatus.className = "mt-2 text-sm status-loading";
+                searchButton.disabled = true;
+                try {
+                    const response = await fetch(localCsvFile);
+                    if (!response.ok) throw new Error(`Erro HTTP ao carregar local: ${response.status} ${response.statusText}`);
+                    const csvText = await response.text();
+                    const parsedData = parseCSV(csvText);
+                    if (parsedData.length > 0) {
+                        BASE_DE_CASOS = parsedData;
+                        isExampleData = false;
+                        csvStatus.textContent = `${parsedData.length} filmes carregados com sucesso de ${localCsvFile}!`;
+                        csvStatus.className = "mt-2 text-sm status-success";
+                    } else {
+                        throw new Error(`Nenhum filme válido encontrado em ${localCsvFile}.`);
+                    }
+                } catch (localError) {
+                    console.warn(`Falha ao carregar ${localCsvFile} localmente:`, localError);
+                    csvStatus.textContent = `Falha ao carregar ${localCsvFile}. A usar dados de exemplo.`;
+                    csvStatus.className = "mt-2 text-sm status-warning";
+                    BASE_DE_CASOS = exampleData.map(filme => {
+                        ['diretores', 'roteiristas', 'estrelas', 'generos', 'pais_origem', 'idioma'].forEach(key => {
+                            if (!filme[key]) filme[key] = [];
+                        });
+                        return filme;
                     });
-                    return filme;
-                });
-                isExampleData = true;
-                updateDataBasedInputs();
-                searchButton.disabled = false;
+                    isExampleData = true;
+                } finally {
+                    updateDataBasedInputs();
+                    searchButton.disabled = false;
+                }
                 return;
             }
 
@@ -744,27 +765,39 @@
                     csvStatus.textContent = `${parsedData.length} filmes carregados com sucesso do CSV!`;
                     csvStatus.className = "mt-2 text-sm status-success";
                 } else {
-                    csvStatus.textContent = "Nenhum filme válido encontrado no CSV. A usar dados de exemplo.";
-                    csvStatus.className = "mt-2 text-sm status-warning";
+                    // Se o CSV da URL estiver vazio ou mal formatado, mas carregou, ainda tentamos o local antes do exemplo.
+                    throw new Error("Nenhum filme válido encontrado no CSV da URL.");
+                }
+            } catch (error) {
+                console.error("Erro ao carregar ou parsear CSV da URL:", error);
+                csvStatus.textContent = `Erro ao carregar CSV da URL: ${error.message}. A tentar carregar ${localCsvFile} localmente...`;
+                csvStatus.className = "mt-2 text-sm status-warning"; // Mudado para warning enquanto tenta local
+
+                try {
+                    const response = await fetch(localCsvFile);
+                    if (!response.ok) throw new Error(`Erro HTTP ao carregar local: ${response.status} ${response.statusText}`);
+                    const csvText = await response.text();
+                    const parsedData = parseCSV(csvText);
+                    if (parsedData.length > 0) {
+                        BASE_DE_CASOS = parsedData;
+                        isExampleData = false;
+                        csvStatus.textContent = `${parsedData.length} filmes carregados com sucesso de ${localCsvFile} (fallback)!`;
+                        csvStatus.className = "mt-2 text-sm status-success";
+                    } else {
+                        throw new Error(`Nenhum filme válido encontrado em ${localCsvFile} (fallback).`);
+                    }
+                } catch (localError) {
+                    console.error(`Erro ao carregar ${localCsvFile} (fallback):`, localError);
+                    csvStatus.textContent = `Falha ao carregar CSV da URL e de ${localCsvFile}. Verifique URL, formato e CORS. A usar dados de exemplo.`;
+                    csvStatus.className = "mt-2 text-sm status-error";
                     BASE_DE_CASOS = exampleData.map(filme => { // Garante que arrays de exemplo sejam arrays
                         ['diretores', 'roteiristas', 'estrelas', 'generos', 'pais_origem', 'idioma'].forEach(key => {
                             if (!filme[key]) filme[key] = [];
                         });
                         return filme;
                     });
-                    isExampleData = true;
+                    isExampleData = true; // Definido como true pois fallback para exemplo
                 }
-            } catch (error) {
-                console.error("Erro ao carregar ou parsear CSV:", error);
-                csvStatus.textContent = `Erro ao carregar CSV: ${error.message}. Verifique URL, formato e CORS. A usar dados de exemplo.`;
-                csvStatus.className = "mt-2 text-sm status-error";
-                BASE_DE_CASOS = exampleData.map(filme => { // Garante que arrays de exemplo sejam arrays
-                    ['diretores', 'roteiristas', 'estrelas', 'generos', 'pais_origem', 'idioma'].forEach(key => {
-                        if (!filme[key]) filme[key] = [];
-                    });
-                    return filme;
-                });
-                isExampleData = true;
             } finally {
                 updateDataBasedInputs(); // Atualiza inputs com base nos dados carregados (reais ou de exemplo)
                 searchButton.disabled = false; // Habilita o botão de busca após tentativa de carregamento
